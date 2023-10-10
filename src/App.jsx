@@ -2,9 +2,8 @@ import React from 'react'
 import { nanoid } from 'nanoid'
 import he from 'he'
 import './App.css'
-import Questions from './components/Questions'
+import QuestionBlock from './components/QuestionBlock'
 import Intro from './components/Intro'
-import AnswerList from './components/AnswerList'
 
 function App() {
   const [quizStarted, setQuizStarted] = React.useState(false);
@@ -12,7 +11,7 @@ function App() {
   const [questionsArr, setQuestionsArr] = React.useState({});
   const [options, setOptions] = React.useState({});
   const [dataLoaded, setDataLoaded] = React.useState(false);
-  const [formData, setFormData] = React.useState({ selectedOption : "test" });
+  const [answerLists, setAnswerLists] = React.useState({});
   
   React.useEffect(() => {
       fetch('https://opentdb.com/api.php?amount=5')
@@ -65,12 +64,34 @@ React.useEffect(() => {
     }
 }, [options])
 
+React.useEffect(() => {
+    if(questionsArr.length != 5) return;
+    else {
+        // return function al() {
+        //     return answerLists;
+        // }
+        setAnswerLists(questionsArr.map(question => {
+            const ques = question.question;
+            const name = question.qId;
+    
+            return question.answers.map(ans => {
+                return (
+                {   ques: ques,
+                    [name]: ans.option
+                });
+            })
+        }));
+    }
+}, [questionsArr])
+
+
 function handleChange(event) {
     const {name, value, type, checked} = event.target
 
-    setFormData(prevFormData => {
+    setAnswerLists(prevAnsData => {
+        setTimeout(() => { console.log(prevAnsData) }, 1000)
         return {
-            ...prevFormData,
+            ...prevAnsData,
             [name]: type === "checkbox" ? checked : value
         }
     })
@@ -79,19 +100,20 @@ function handleChange(event) {
 function startQuiz() {
     setQuizStarted(true)
 }
+
+const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(answerLists)
+}
   
   const questionElements = (questionsArr.length === undefined) ? '' : questionsArr.map(q => { 
           return (
             <article className="qna-container" key={q.qId}>
-              <Questions 
-                  id={q.qId}
-                  question={q.question}
-                  correct={q.correct}
-              />
-              <AnswerList 
+              <QuestionBlock 
                 question={q.question}
                 qid={q.qId}
                 answers={q.answers}
+                answerLists={answerLists}
                 handleChange={handleChange}
               />
               </article>
@@ -103,7 +125,11 @@ function startQuiz() {
           {
           quizStarted ?
               <section className="quiz-container">
-              {questionElements}
+                <form onSubmit={handleSubmit}>
+                    {questionElements}
+                    <button>Check Answers</button>
+                </form>
+                    
               </section>
               :
               <Intro startQuiz={startQuiz}/>
