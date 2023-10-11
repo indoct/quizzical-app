@@ -41,7 +41,6 @@ function handleChange(event) {
 //    return testObj
 
     setQuestions(questions.map(question => {
-        console.log(questions[0])
         return {
             ...question,
             [name]: type === "checkbox" ? checked : value,
@@ -63,7 +62,7 @@ const handleSubmit = (e) => {
                 question={q.question}
                 qid={q.qId}
                 qNum={ind}
-                selected={q[qContent]}
+                // selected={q[qContent]}
                 answers={q.answers}
                 handleChange={handleChange}
               />
