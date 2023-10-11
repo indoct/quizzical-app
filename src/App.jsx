@@ -58,14 +58,13 @@ const handleSubmit = (e) => {
     // console.log(q[`'propName'`])
     // const currentQ = q;
     // console.log(currentQ)
-    const testObj = Object.values(q)[0];
-    console.log(testObj)
+    // const testObj = Object.values(q)[0];
 
           return (
             <article className="qna-container" key={nanoid()}>
               <QuestionBlock     
                 question={q.question}
-                // selected={q.propName}
+                // selected={testObj}
                 qid={q.qId}
                 qNum={ind}
                 answers={q.answers}
