@@ -19,7 +19,6 @@ const answerElements = props.answers.map(a => {
                     name={qid}
                     id={a.key}
                     value={opt}
-                    
                     onChange={props.handleChange}
                 /> {opt}
             </label>

@@ -6,13 +6,25 @@ import QuestionBlock from './components/QuestionBlock'
 import Intro from './components/Intro'
 
 function App() {
-  const [quizStarted, setQuizStarted] = React.useState(false);
-  const [questions, setQuestions] = React.useState({});
-  const [questionsArr, setQuestionsArr] = React.useState({});
-  const [options, setOptions] = React.useState({});
-  const [dataLoaded, setDataLoaded] = React.useState(false);
-  const [answerLists, setAnswerLists] = React.useState({});
-  
+    // const [test, setTest] = React.useState(false)
+    // const depArr = []
+    
+    // setTimeout(() => { depArr.push(1,2,3,4) })
+    
+    // React.useEffect(() => {
+        //     setTest(prevTest => !prevTest)
+        // }, [depArr])
+    const [quizStarted, setQuizStarted] = React.useState(false);
+    const [questions, setQuestions] = React.useState({});
+    const [questionsArr, setQuestionsArr] = React.useState({});
+    const [options, setOptions] = React.useState({});
+    const [dataLoaded, setDataLoaded] = React.useState(false);
+    const [answerLists, setAnswerLists] = React.useState({});
+
+    function startQuiz() {
+        setQuizStarted(true)
+    }
+
   React.useEffect(() => {
       fetch('https://opentdb.com/api.php?amount=5')
           .then(res => res.json())
@@ -64,52 +76,61 @@ React.useEffect(() => {
     }
 }, [options])
 
-React.useEffect(() => {
-    if(questionsArr.length != 5) return;
-    else {
-        // return function al() {
-        //     return answerLists;
-        // }
-        setAnswerLists(questionsArr.map(question => {
-            const ques = question.question;
-            const name = question.qId;
+// React.useEffect(() => {
+//     if(questionsArr.length != 5) return;
+//     else {
+//         setAnswerLists(questionsArr.map(question => {
+//             return question
+//         }))
+//         // return function al() {
+//         //     return answerLists;
+//         // }
+//         // setAnswerLists(questionsArr.map(question => {
+//         //     const name = question.qId;
     
-            return question.answers.map(ans => {
-                return (
-                {   ques: ques,
-                    [name]: ans.option
-                });
-            })
-        }));
-    }
-}, [questionsArr])
+//         //     return question.answers.map(ans => {
+//         //         return (
+//         //         {
+//         //             selected: ""
+//         //         });
+//         //     })
+//         // }));
+//     }
+// }, [questionsArr])
 
 
 function handleChange(event) {
     const {name, value, type, checked} = event.target
 
     setAnswerLists(prevAnsData => {
-        setTimeout(() => { console.log(prevAnsData) }, 1000)
         return {
             ...prevAnsData,
             [name]: type === "checkbox" ? checked : value
         }
     })
+
 }
-  
-function startQuiz() {
-    setQuizStarted(true)
+
+function checkAnswers() {
+    console.log('test')
+    // const ansName = "";
+    // questionsArr.forEach(q => { 
+    //     if(q.qId === name) {
+    //         if(value === q.correct) { console.log(`correct answer selected: ${value}`)}
+    //     }
+    // })
 }
 
 const handleSubmit = (e) => {
     e.preventDefault()
+    checkAnswers()
     console.log(answerLists)
 }
   
   const questionElements = (questionsArr.length === undefined) ? '' : questionsArr.map(q => { 
           return (
             <article className="qna-container" key={q.qId}>
-              <QuestionBlock 
+              <QuestionBlock     
                 question={q.question}
                 qid={q.qId}
                 answers={q.answers}
@@ -119,7 +140,7 @@ const handleSubmit = (e) => {
               </article>
           )
       })
-  
+
   return (
       <main>
           {
@@ -127,7 +148,7 @@ const handleSubmit = (e) => {
               <section className="quiz-container">
                 <form onSubmit={handleSubmit}>
                     {questionElements}
-                    <button>Check Answers</button>
+                    <button disabled={Object.keys(answerLists).length != 5}>Check Answers</button>
                 </form>
                     
               </section>
