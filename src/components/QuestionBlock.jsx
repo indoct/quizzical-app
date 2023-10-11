@@ -1,36 +1,31 @@
 import React from "react"
+import { nanoid } from 'nanoid'
 
 export default function QuestionBlock(props) {
 
-// const answerElements = props.answers.map(a => {
-// return (
-//     <li className="ans-option" key={a.key} selected={a.selected} onClick={()=>toggle(a.optId, a.selected)}>{a.option}</li>
-//     )
-// })
-
-const answerElements = props.answers.map(a => {
-    const opt = a.option;
-    const qid = props.qid;
+const answerElements = props.answers.map((a,i) => {
+    const akey = nanoid();
+    const aId = `Q${props.qNum+1}0${i+1}-${a}`
+    console.log(props.selected)
 
     return (
-            <label key={a.key} htmlFor={a.key}>
+            <label key={akey} htmlFor={aId}>
                 <input 
                     type="radio"
-                    name={qid}
-                    id={a.key}
-                    value={opt}
+                    name={props.question}
+                    id={aId}
+                    // checked={checked}
+                    value={a}
                     onChange={props.handleChange}
-                /> {opt}
+                /> {a}
             </label>
     )
 })
 
 return (
-    <>
         <fieldset>
             <legend>{props.question}</legend>
             {answerElements}
         </fieldset>
-    </>
     )
 }
