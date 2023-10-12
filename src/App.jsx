@@ -2,7 +2,7 @@ import React from 'react'
 import { nanoid } from 'nanoid'
 import he from 'he'
 import './App.css'
-import QuestionBlock from './components/QuestionBlock'
+import AnswerList from './components/AnswerList'
 import Intro from './components/Intro'
 
 function App() {
@@ -17,15 +17,13 @@ function App() {
             incArray.splice(((incArray.length+1) * Math.random()), 0, q.correct_answer);
             const decodedArr = [];
             incArray.map(item => decodedArr.push(he.decode(item)))
-            const decQ = he.decode(q.question);
-            const qName = ind === 0 ? `question01` : `question0${ind+1}`
 
             return {
-                qId: qName,
-                question: decQ,
+                qId: ind === 0 ? `question01` : `question0${ind+1}`,
+                question: he.decode(q.question),
                 correct: he.decode(q.correct_answer),
                 answers: decodedArr,
-                [qName]: ""
+                selected: ""
             }
           })))
   }, [])
@@ -35,52 +33,82 @@ function startQuiz() {
 }
 
 function handleChange(event) {
-    const { name, value, type, checked } = event.target;
+    const { name, value } = event.target;
+
+  //   let prior = form.querySelector('label.checked input[name="' + target.name + '"]');
+  //   if (prior) {
+  //     prior.parentElement.classList.remove("checked");
+  //   }
+  //   targetParent.classList.add("checked");
 
     setQuestions(questions.map(question => {
-        return {
-            ...question,
-            [name]: type === "checkbox" ? checked : value
+      if(name === question.qId) {
+          return {
+              ...question,
+              selected: value
+          }
+        } else {
+          return question;
         }
     }))
 
 }
 
+const checkAnswers = () => {
+  questions.forEach(ans => {
+    console.log(ans.selected, ans.correct)
+  })
+}
+
 const handleSubmit = (e) => {
     e.preventDefault()
     console.log(questions)
+    checkAnswers()
+}
+
+const styles = {
+
 }
   
-  const questionElements = (questions.length === undefined) ? '' : questions.map((q,ind) => { 
-    // const propName = Object.getOwnPropertyNames(q)[4];
-    // const qName = ind === 0 ? `question01` : `question0${ind+1}`
-    // console.log(q.qName)
-    // console.log(q[`'propName'`])
-    // const currentQ = q;
-    // console.log(currentQ)
-    // const testObj = Object.values(q)[0];
 
-          return (
-            <article className="qna-container" key={nanoid()}>
-              <QuestionBlock     
-                question={q.question}
-                // selected={testObj}
-                qid={q.qId}
-                qNum={ind}
-                answers={q.answers}
-                handleChange={handleChange}
-              />
-              </article>
+  const QuestionEl=()=>{
+      return questions.map((q,qi) => {
+        const qNum = qi;
+          return(
+            <React.Fragment key={q.qId}>
+              <fieldset key={q.qId}>
+                <legend>{q.question}</legend>
+                {q.answers.map((a,i) => {
+                  const aId = `Q${qNum+1}0${i+1}-${a}`
+                  return (
+                    <div className="option-cont" key={nanoid()}>
+                      <input 
+                          type="radio"
+                          name={q.qId}
+                          id={aId}
+                          value={a}
+                          checked={questions[qNum].selected === a}
+                          onChange={handleChange}
+                      /> 
+                      <label htmlFor={aId} className="option-label" style={styles}>{a}</label>
+                    </div>
+                  )
+                })}
+              </fieldset>
+            </React.Fragment>
           )
       })
+  }
 
   return (
       <main>
           {
           quizStarted ?
               <section className="quiz-container">
+                
                 <form onSubmit={handleSubmit}>
-                    {questionElements}
+                    {questions.length !== undefined && <QuestionEl />}
+                    
                     <button>Check Answers</button>
                 </form>
                     
