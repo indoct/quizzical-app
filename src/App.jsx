@@ -2,116 +2,100 @@ import React from 'react'
 import { nanoid } from 'nanoid'
 import he from 'he'
 import './App.css'
-import AnswerList from './components/AnswerList'
+import QABlock from './components/QABlock'
 import Intro from './components/Intro'
 
 function App() {
     const [quizStarted, setQuizStarted] = React.useState(false);
-    const [questions, setQuestions] = React.useState({});
+    const [quizArray, setQuizArray] = React.useState({});
+
+    const shuffle = (array) => {
+      for (let i = array.length - 1; i >= 0; i--) {
+             const randomIndex = Math.floor(Math.random() * (i + 1));
+             array.push(array[randomIndex]);
+             array.splice(randomIndex, 1);
+         }
+         return array;
+    }
 
   React.useEffect(() => {
       fetch('https://opentdb.com/api.php?amount=5')
           .then(res => res.json())
-          .then(data => setQuestions(data.results.map((q,ind) => {
-            const incArray = q.incorrect_answers;
-            incArray.splice(((incArray.length+1) * Math.random()), 0, q.correct_answer);
-            const decodedArr = [];
-            incArray.map(item => decodedArr.push(he.decode(item)))
+          .then(data => {
+            setQuizArray(data.results.map(q => {
+            const correctAns = he.decode(q.correct_answer)
+            const decodedInc = q.incorrect_answers.map(a => he.decode(a));
+            const allOptions = [correctAns, ...decodedInc]
 
             return {
-                qId: ind === 0 ? `question01` : `question0${ind+1}`,
+                id:nanoid(),
                 question: he.decode(q.question),
-                correct: he.decode(q.correct_answer),
-                answers: decodedArr,
+                correct: correctAns,
+                incorrect: decodedInc,
+                options: shuffle(allOptions),
                 selected: ""
             }
-          })))
+          }));
+        })
   }, [])
 
 function startQuiz() {
-    setQuizStarted(true)
+  setQuizStarted(true);
 }
 
 function handleChange(event) {
-    const { name, value } = event.target;
+  const { value, dataset } = event.target;
 
-  //   let prior = form.querySelector('label.checked input[name="' + target.name + '"]');
-  //   if (prior) {
-  //     prior.parentElement.classList.remove("checked");
-  //   }
-  //   targetParent.classList.add("checked");
-
-    setQuestions(questions.map(question => {
-      if(name === question.qId) {
-          return {
-              ...question,
-              selected: value
-          }
-        } else {
-          return question;
-        }
-    }))
-
+  for(const quizItem of quizArray) {
+    const optArray = quizItem.options;
+    if(quizItem.id === dataset.id) {
+      for(const optItem of optArray) {
+        const qid = quizItem.id;
+        if(value === optItem) selectOption(value, qid)
+      }
+    }
+  }
 }
 
+function selectOption(val, qid) {
+    setQuizArray(prevQuestions => prevQuestions.map(question => {
+    return question.id===qid ? {...question,  selected:val} : question
+    })) 
+}
+
+const qaElements = quizArray.length !== 5 ? '' : quizArray.map((q,i) => {
+  return(
+  <QABlock 
+    key={q.id}
+    qid={q.id}
+    qnum={`0${i+1}`}
+    selected={q.selected}
+    question={q.question}
+    options={q.options}
+    handleChange={handleChange}
+     />
+  )
+});
+
 const checkAnswers = () => {
-  questions.forEach(ans => {
-    console.log(ans.selected, ans.correct)
-  })
+const answers = quizArray.filter(ans => ans.correct === ans.selected)
+console.log(answers)
 }
 
 const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(questions)
     checkAnswers()
 }
-
-const styles = {
-
-}
-  
-
-  const QuestionEl=()=>{
-      return questions.map((q,qi) => {
-        const qNum = qi;
-          return(
-            <React.Fragment key={q.qId}>
-              <fieldset key={q.qId}>
-                <legend>{q.question}</legend>
-                {q.answers.map((a,i) => {
-                  const aId = `Q${qNum+1}0${i+1}-${a}`
-                  return (
-                    <div className="option-cont" key={nanoid()}>
-                      <input 
-                          type="radio"
-                          name={q.qId}
-                          id={aId}
-                          value={a}
-                          checked={questions[qNum].selected === a}
-                          onChange={handleChange}
-                      /> 
-                      <label htmlFor={aId} className="option-label" style={styles}>{a}</label>
-                    </div>
-                  )
-                })}
-              </fieldset>
-            </React.Fragment>
-          )
-      })
-  }
 
   return (
       <main>
           {
           quizStarted ?
-              <section className="quiz-container">
-                
+              <section className="quiz-container">  
                 <form onSubmit={handleSubmit}>
-                    {questions.length !== undefined && <QuestionEl />}
-                    
+                    {qaElements}
                     <button>Check Answers</button>
                 </form>
-                    
               </section>
               :
               <Intro startQuiz={startQuiz}/>
