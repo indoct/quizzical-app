@@ -57,8 +57,8 @@ function startQuiz() {
 
 function handleChange(event) {
   const { value, dataset } = event.target;
-
-  setQuizState(prevState => {
+  if(!quizState.game_over) {
+    setQuizState(prevState => {
       const newCount = quizArray.filter(x => x.selected.length > 0).length + 1
       return newCount === 5 ? { ...prevState, selected_count: !prevState.selected_count } : prevState
   })
@@ -78,6 +78,7 @@ function selectOption(val, qid) {
     setQuizArray(prevQuestions => prevQuestions.map(question => {
     return question.id===qid ? {...question,  selected:val} : question
     }))
+  }
 }
 
 const qaElements = quizArray.length !== 5 ? '' : quizArray.map((q,i) => {
@@ -126,13 +127,13 @@ const handleReplayBtn = (e) => {
                 <form>
                     {qaElements}
                 </form>
-                <div>
+                <div className="btn-container">
                   {quizState.game_over ?
                   <>
                     <p className="answer-text">{checkAnswers()}</p>
-                    <button id="replay" onClick={handleReplayBtn}>Play Again</button> 
+                    <button onClick={handleReplayBtn}>Play Again</button> 
                   </> :
-                    <button id="check-answers" onClick={handleCheckBtn} disabled={!quizState.selected_count || quizState.game_over }>Check Answers</button>
+                    <button onClick={handleCheckBtn} disabled={!quizState.selected_count || quizState.game_over } id="check-answer">Check Answers</button>
                   }
                 </div>
               </>

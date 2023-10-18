@@ -2,6 +2,7 @@ import React from "react"
 import { nanoid } from 'nanoid'
 
 export default function QABlock(props) {
+    // const [color, setColor] = React.useState("");
     const gO = props.quizState.game_over;
     const optArray=props.options.map(option => {
         return option
@@ -14,7 +15,8 @@ export default function QABlock(props) {
         : gO && props.correct === answer ? "#6BB389"
         : "#f4f4f4",
 
-        opacity: gO && props.correct === answer || !gO ? 1 : 0.6
+        opacity: gO && props.correct === answer || !gO ? 1 : 0.6,
+        cursor: !gO ? 'pointer' : ''
     }
 
     const optId = `${props.qnum}0${index+1}-${answer}`

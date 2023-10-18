@@ -36,6 +36,16 @@ button {
   font-size: 1.1rem;
 }
 
+#check-answer {
+  margin-top: 30px;
+}
+
+.answer-text {
+  margin: 0;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -66,6 +76,11 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.btn-container {
+  padding-bottom: 2rem;
+  background: var(--quiz-light);
 }
 
 form {
@@ -100,9 +115,7 @@ fieldset {
 }
 
 fieldset:last-child {
-  padding-bottom: 0;
   margin-bottom: 0;
-  border-bottom: 0;
 }
 
 .opt-container {
