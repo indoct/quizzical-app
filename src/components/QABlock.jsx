@@ -2,20 +2,28 @@ import React from "react"
 import { nanoid } from 'nanoid'
 
 export default function QABlock(props) {
+    const gO = props.quizState.game_over;
     const optArray=props.options.map(option => {
         return option
     })
     const optionsElement = optArray.map((answer, index) => {
-              
-    const styles = {
-        backgroundColor: props.selected === answer ? "#59E391" : "white"
-    }
-    const optId = `${props.qnum}0${index+1}-${answer}`  
 
+    const styles = { 
+        backgroundColor: !gO && props.selected === answer ? "#96c0c5" 
+        : gO && props.selected === answer && props.correct !== props.selected ? "#FF7370"
+        : gO && props.correct === answer ? "#6BB389"
+        : "#f4f4f4",
+
+        opacity: gO && props.correct === answer || !gO ? 1 : 0.6
+    }
+
+    const optId = `${props.qnum}0${index+1}-${answer}`
+
+    
           return (
-                  <label key={answer} htmlFor={optId} style={styles}>
-                      {answer}
-                      <input
+                    <div className="opt-container" key={nanoid()}>
+                    <input
+                      className={props.selected===answer ? 'selected' : ''}
                       type="radio"
                       id={optId}
                       name={answer}
@@ -24,14 +32,15 @@ export default function QABlock(props) {
                       data-id={props.qid}
                       onChange={(e) => props.handleChange(e)}
                       />
-                  </label>
+                  <label key={answer} htmlFor={optId} style={styles}>{answer}</label>
+                  </div>
           );
         });
              
               
               return (
                   
-              <fieldset data-id={props.qid}>
+              <fieldset>
                   <legend>{props.question}</legend>
                           {optionsElement}
               </fieldset>
