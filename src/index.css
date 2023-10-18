@@ -69,6 +69,7 @@ button {
   background-color: var(--quiz-dark);
   cursor: pointer;
   transition: border-color 0.25s;
+  min-width: 180px;
 }
 button:hover {
   border-color: #646cff;
@@ -84,7 +85,7 @@ button:focus-visible {
 }
 
 form {
-  padding: 2rem 3rem;
+  padding: 2rem 5rem 2rem 2.4rem;
   background: var(--quiz-light);
   display: flex;
   flex-direction: column;
@@ -107,7 +108,7 @@ fieldset {
   padding: 1rem 0 1.2rem;
   display: flex;
   flex-direction: row;
-  gap: 0.6rem 10px;
+  gap: 0.6rem 8px;
   border-width: 0 0 1px 0;
   border-color: #cececa;
   width: 100%;
