@@ -2,11 +2,11 @@ import React from "react"
 import { nanoid } from 'nanoid'
 
 export default function QABlock(props) {
-    // const [color, setColor] = React.useState("");
     const gO = props.quizState.game_over;
     const optArray=props.options.map(option => {
         return option
     })
+
     const optionsElement = optArray.map((answer, index) => {
 
     const styles = { 
@@ -16,11 +16,10 @@ export default function QABlock(props) {
         : "#f4f4f4",
 
         opacity: gO && props.correct === answer || !gO ? 1 : 0.6,
-        cursor: !gO ? 'pointer' : ''
+        cursor: !gO ? 'pointer' : '',
     }
 
     const optId = `${props.qnum}0${index+1}-${answer}`
-
     
           return (
                     <div className="opt-container" key={nanoid()}>
@@ -34,7 +33,10 @@ export default function QABlock(props) {
                       data-id={props.qid}
                       onChange={(e) => props.handleChange(e)}
                       />
-                  <label key={answer} htmlFor={optId} style={styles}>{answer}</label>
+                  <label 
+                    key={answer} 
+                    htmlFor={optId} 
+                    style={styles}>{answer}</label>
                   </div>
           );
         });

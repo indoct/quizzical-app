@@ -133,7 +133,7 @@ input[type="radio"] {
 }
 
 label {
-  border: 1px solid;
+  border: 1px solid var(--quiz-dark);
   transition: all 0.3s;
   padding: 0.6rem 1rem;
   border-radius: 32px;
