@@ -22,7 +22,7 @@ export default function QABlock(props) {
     const optId = `${props.qnum}0${index+1}-${answer}`
     
           return (
-                    <div className="opt-container" key={nanoid()}>
+                    <React.Fragment key={nanoid()}>
                     <input
                       className={props.selected===answer ? 'selected' : ''}
                       type="radio"
@@ -37,7 +37,7 @@ export default function QABlock(props) {
                     key={answer} 
                     htmlFor={optId} 
                     style={styles}>{answer}</label>
-                  </div>
+                  </React.Fragment>
           );
         });
              
@@ -46,7 +46,13 @@ export default function QABlock(props) {
                   
               <fieldset>
                   <legend>{props.question}</legend>
-                          {optionsElement}
+                  <div className="opt-container">
+                    <div className="options">
+                        {optionsElement}
+                    </div>
+                        {gO && <span className="ui-feedback">{props.selected === props.correct ? '✔️' : '❌'}</span>}
+                  </div>
+                          
               </fieldset>
           )
       }
