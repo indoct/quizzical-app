@@ -38,9 +38,14 @@ button {
   font-size: 1.06rem;
 }
 
-#check-answer {
-  margin-top: 30px;
+button:disabled:hover {
+  cursor: default;
+  border-color: var(--quiz-dark);
 }
+
+/* #check-answer {
+  margin-top: 40px;
+} */
 
 .answer-text {
   margin: 0;

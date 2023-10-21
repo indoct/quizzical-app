@@ -1,6 +1,7 @@
 import React from 'react'
 import { nanoid } from 'nanoid'
 import he from 'he'
+import Confetti from "react-confetti"
 import './App.css'
 import QABlock from './components/QABlock'
 import Intro from './components/Intro'
@@ -8,7 +9,8 @@ import Intro from './components/Intro'
 function App() {
     const [quizStarted, setQuizStarted] = React.useState(false);
     const [quizArray, setQuizArray] = React.useState([]);
-    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false, data_loaded: false });
+    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false, data_loaded: false, num_qs: 5 });
+    const [allCorrect, setAllCorrect] = React.useState(false)
 
     const shuffle = (array) => {
       for (let i = array.length - 1; i >= 0; i--) {
@@ -75,6 +77,10 @@ function handleChange(event) {
 }
 
 function selectOption(val, qid) {
+  // setAllCorrect(prevState => {
+  //   const correctCount = quizArray.filter(ans => ans.correct === ans.selected);
+  //   return correctCount.length === quizArray.length ? !prevState : prevState;
+  // })
     setQuizArray(prevQuestions => prevQuestions.map(question => {
     return question.id===qid ? {...question,  selected:val} : question
     }))
@@ -82,6 +88,7 @@ function selectOption(val, qid) {
 }
 
 const qaElements = quizArray.length !== 5 ? '' : quizArray.map((q,i) => {
+  console.log(q.correct);
   return(
   <QABlock 
     key={q.id}
@@ -98,8 +105,14 @@ const qaElements = quizArray.length !== 5 ? '' : quizArray.map((q,i) => {
 });
 
 const checkAnswers = () => {
-const answers = quizArray.filter(ans => ans.correct === ans.selected);
-return `You scored ${answers.length}/${quizArray.length} correct answers.`
+const correctAnswers = quizArray.filter(ans => ans.correct === ans.selected).length;
+// if(answers.length === quizArray.length) {
+//   setQuizState(prevDataState => ({
+//     ...prevDataState,
+//     all_correct: !prevDataState.all_correct
+//     }))
+// }
+return correctAnswers;
 }
 
 const handleCheckBtn = () => {
@@ -118,27 +131,34 @@ const handleReplayBtn = (e) => {
       setQuizStarted(false);
 
     }
-
+console.log(allCorrect)
   return (
       <main>
           {
           quizStarted ?
               <>
+              {quizState.game_over && (checkAnswers() === quizArray.length) && <Confetti />}
                 <form>
                     {qaElements}
                 </form>
                 <div className="btn-container">
                   {quizState.game_over ?
                   <>
-                    <p className="answer-text">{checkAnswers()}</p>
+                    <p className="answer-text">You scored {checkAnswers()}/{quizArray.length} correct answers.</p>
                     <button onClick={handleReplayBtn}>Play Again</button> 
                   </> :
+                  <>
+                    <p className="answer-text">{!quizState.selected_count ? 'Please select an answer for every question' : 'Good to go!'}</p>
                     <button onClick={handleCheckBtn} disabled={!quizState.selected_count || quizState.game_over } id="check-answer">Check Answers</button>
+                  </>
                   }
                 </div>
               </>
               :
-              <Intro startQuiz={startQuiz}/>
+              <Intro 
+                startQuiz={startQuiz}
+                numOfQs={quizState.num_qs}
+                />
           }
       </main>
   )
