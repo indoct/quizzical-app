@@ -94,13 +94,45 @@ button:focus-visible {
 }
 
 form {
-  padding: 1.6rem 2.4rem 0rem 2.4rem;
+  padding: 1.8rem 2rem;
   background: #f4f4f499;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   border-radius: 20px;
+}
+
+#setup {
+  row-gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  align-content: stretch;
+}
+
+select {
+  font-family: "Instrument Sans", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 5px;
+  margin-top: 5px;
+  background: rgb(218 223 255);
+  color: var(--quiz-dark);
+  border-radius: 6px;
+}
+
+.quiz-setup {
+  text-align: left;
+  /* border-top: 1px solid rgb(211, 211, 211);
+  border-bottom: 1px solid rgb(211, 211, 211); */
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+#quiz-body {
+  padding: 1.6rem 2.4rem 0rem 2.4rem;
 }
 
 legend {
@@ -152,7 +184,7 @@ input[type="radio"] {
   width: 0;
 }
 
-label {
+label.ans-display {
   border: 1px solid var(--quiz-dark);
   transition: all 0.3s;
   padding: 0.4rem 1rem;

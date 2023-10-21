@@ -34,6 +34,7 @@ export default function QABlock(props) {
                       onChange={(e) => props.handleChange(e)}
                       />
                   <label 
+                    className="ans-display"
                     key={answer} 
                     htmlFor={optId} 
                     style={styles}>{answer}</label>

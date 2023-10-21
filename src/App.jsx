@@ -9,7 +9,7 @@ import Intro from './components/Intro'
 function App() {
     const [quizStarted, setQuizStarted] = React.useState(false);
     const [quizArray, setQuizArray] = React.useState([]);
-    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false, data_loaded: false, num_qs: 5 });
+    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false, data_loaded: false, num_qs: 5, difficulty: 'Easy', categories: [] });
     const [allCorrect, setAllCorrect] = React.useState(false)
 
     const shuffle = (array) => {
@@ -25,6 +25,7 @@ function App() {
       fetch('https://opentdb.com/api.php?amount=5')
           .then(res => res.json())
           .then(data => {
+            console.log(data)
             if(!quizStarted) {
               setQuizArray(data.results.map(q => {  
                 const correctAns = he.decode(q.correct_answer)
@@ -88,7 +89,6 @@ function selectOption(val, qid) {
 }
 
 const qaElements = quizArray.length !== 5 ? '' : quizArray.map((q,i) => {
-  console.log(q.correct);
   return(
   <QABlock 
     key={q.id}
@@ -131,14 +131,14 @@ const handleReplayBtn = (e) => {
       setQuizStarted(false);
 
     }
-console.log(allCorrect)
+
   return (
       <main>
           {
           quizStarted ?
               <>
               {quizState.game_over && (checkAnswers() === quizArray.length) && <Confetti />}
-                <form>
+                <form id="quiz-body">
                     {qaElements}
                 </form>
                 <div className="btn-container">
@@ -157,7 +157,9 @@ console.log(allCorrect)
               :
               <Intro 
                 startQuiz={startQuiz}
-                numOfQs={quizState.num_qs}
+                num={quizState.num_qs}
+                cat={quizState.categories}
+                difficulty={quizState.difficulty}
                 />
           }
       </main>
