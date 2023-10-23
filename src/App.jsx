@@ -10,7 +10,7 @@ function App() {
     const [quizStarted, setQuizStarted] = React.useState(false);
     const [quizArray, setQuizArray] = React.useState([]);
     const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false });
-    const [quizSettings, setQuizSettings] = React.useState({ amount: 5, difficulty: '', category: '' })
+    const [quizSettings, setQuizSettings] = React.useState({ difficulty: '', category: '' })
 
   const shuffle = (array) => {
       for (let i = array.length - 1; i >= 0; i--) {
@@ -22,8 +22,8 @@ function App() {
     }
 
   const generateAPIConfig = () => {
-      const { amount, difficulty, category } = quizSettings;
-      let configString = `https://opentdb.com/api.php?amount=${amount}`
+      const { difficulty, category } = quizSettings;
+      let configString = `https://opentdb.com/api.php?amount=5`
       return    category && difficulty ? configString  + `&category=${category}&difficulty=${difficulty}`
               : !difficulty && category ? configString + `&category=${category}`
               : !category && difficulty ? configString + `&difficulty=${difficulty}`
@@ -31,8 +31,7 @@ function App() {
     }
   
   function fetchData() {
-      const apiUrl = generateAPIConfig();
-      console.log(apiUrl)
+  const apiUrl = generateAPIConfig();
       fetch(`${apiUrl}`)
       .then(res => res.json())
       .then(data => {
@@ -64,7 +63,6 @@ function handleSettingsChange(event) {
          : name === 'difficulty' && value === 'any' ? { ...prevSettings, difficulty: '' }
          : name === 'category' && value !== 'any' ? { ...prevSettings, category: value }
          : name === 'category' && value === 'any' ? { ...prevSettings, category: '' }
-         : name === 'amount' ? { ...prevSettings, amount: Number(value) }
          : prevSettings
   })
 }
@@ -74,7 +72,7 @@ function handleChange(event) {
   if(!quizState.game_over) {
     setQuizState(prevState => {
       const newCount = quizArray.filter(x => x.selected.length > 0).length + 1
-      return newCount === quizSettings.amount ? { ...prevState, selected_count: !prevState.selected_count } : prevState
+      return newCount === quizArray.length ? { ...prevState, selected_count: !prevState.selected_count } : prevState
   })
 
   for(const quizItem of quizArray) {
@@ -122,7 +120,7 @@ const handleCheckBtn = () => {
         game_over: !prevState.game_over
       }))
       setQuizSettings(prevSettings => {
-        return { ...prevSettings, amount: 5, difficulty: '', category: '' }
+        return { ...prevSettings, difficulty: '', category: '' }
       })
       checkAnswers()
     }
@@ -144,7 +142,7 @@ const handleReplayBtn = () => {
           {
           quizStarted ?
               <>
-              {quizState.game_over && (checkAnswers() === quizSettings.amount) && <Confetti />}
+              {quizState.game_over && (checkAnswers() === quizArray.length) && <Confetti />}
                 <form id="quiz-body">
                     {qaElements}
                 </form>
@@ -164,7 +162,6 @@ const handleReplayBtn = () => {
               :
               <Intro 
                 handleSettingsChange={handleSettingsChange}
-                amount={quizSettings.amount}
                 diff={quizSettings.difficulty}
                 cat={quizSettings.category}
                 handleStart={fetchData}

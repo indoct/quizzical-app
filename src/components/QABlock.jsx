@@ -10,7 +10,8 @@ export default function QABlock(props) {
     const optionsElement = optArray.map((answer, index) => {
 
     const styles = { 
-        backgroundColor: !gO && props.selected === answer ? "#96c0c5" 
+        color: !gO && props.selected === answer ? "#f4f4f4" : "#0f1422",
+        backgroundColor: !gO && props.selected === answer ? "#2d313c" 
         : gO && props.selected === answer && props.correct !== props.selected ? "#FF7370"
         : gO && props.correct === answer ? "#6BB389"
         : "#f4f4f4",
