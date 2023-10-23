@@ -57,7 +57,6 @@ function App() {
 
 function handleSettingsChange(event) {
   const { name, value } = event.target;
-  console.log(value)
   setQuizSettings(prevSettings => {
     return name === 'difficulty' && value !== 'any' ? { ...prevSettings, difficulty: value }
          : name === 'difficulty' && value === 'any' ? { ...prevSettings, difficulty: '' }
@@ -162,8 +161,6 @@ const handleReplayBtn = () => {
               :
               <Intro 
                 handleSettingsChange={handleSettingsChange}
-                diff={quizSettings.difficulty}
-                cat={quizSettings.category}
                 handleStart={fetchData}
                 />
           }
