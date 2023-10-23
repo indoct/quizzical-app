@@ -125,6 +125,11 @@ select,
   box-sizing: border-box;
 }
 
+.quiz-setup input:disabled::-webkit-inner-spin-button {
+  color: grey;
+  opacity: 0 !important;
+}
+
 /* ensures the increment/decrement arrows always display */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

@@ -12,9 +12,7 @@ function App() {
     const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false });
     const [quizSettings, setQuizSettings] = React.useState({ amount: 5, difficulty: '', category: '' })
 
-    console.log('quiz started: ' + quizStarted)
-
-    const shuffle = (array) => {
+  const shuffle = (array) => {
       for (let i = array.length - 1; i >= 0; i--) {
              const randomIndex = Math.floor(Math.random() * (i + 1));
              array.push(array[randomIndex]);
@@ -23,7 +21,7 @@ function App() {
          return array;
     }
 
-    const generateAPIConfig = () => {
+  const generateAPIConfig = () => {
       const { amount, difficulty, category } = quizSettings;
       let configString = `https://opentdb.com/api.php?amount=${amount}`
       return    category && difficulty ? configString  + `&category=${category}&difficulty=${difficulty}`
@@ -34,6 +32,7 @@ function App() {
   
   function fetchData() {
       const apiUrl = generateAPIConfig();
+      console.log(apiUrl)
       fetch(`${apiUrl}`)
       .then(res => res.json())
       .then(data => {
@@ -52,24 +51,19 @@ function App() {
             }
           }));
     })
-    // .then(() => setQuizState(prevDataState => ({
-    //   ...prevDataState,
-    //   data_loaded: true
-    //   })
-    // ))
-
-    startQuiz()
-}
-
-function startQuiz() {
-  setQuizStarted(prevState => !prevState);
+    .then(() => {
+      if(!quizStarted) setQuizStarted(prevState => !prevState)
+    })
 }
 
 function handleSettingsChange(event) {
   const { name, value } = event.target;
+  console.log(value)
   setQuizSettings(prevSettings => {
     return name === 'difficulty' && value !== 'any' ? { ...prevSettings, difficulty: value }
+         : name === 'difficulty' && value === 'any' ? { ...prevSettings, difficulty: '' }
          : name === 'category' && value !== 'any' ? { ...prevSettings, category: value }
+         : name === 'category' && value === 'any' ? { ...prevSettings, category: '' }
          : name === 'amount' ? { ...prevSettings, amount: Number(value) }
          : prevSettings
   })
@@ -117,7 +111,7 @@ const qaElements = quizArray.map((q,i) => {
   )
 });
 
-const checkAnswers = () => {
+function checkAnswers() {
 const correctAnswers = quizArray.filter(ans => ans.correct === ans.selected).length;
 return correctAnswers;
 }
@@ -127,8 +121,8 @@ const handleCheckBtn = () => {
         ...prevState,
         game_over: !prevState.game_over
       }))
-      setQuizSettings(() => {
-        return { amount: 5, difficulty: '', category: '' }
+      setQuizSettings(prevSettings => {
+        return { ...prevSettings, amount: 5, difficulty: '', category: '' }
       })
       checkAnswers()
     }
@@ -138,11 +132,11 @@ const handleReplayBtn = () => {
         selected_count: !prevState.selected_count,
         game_over: !prevState.game_over
       }))
-      setQuizArray(() => {
-       return []
-      })
-      setQuizStarted(false);
-
+      // setQuizArray(() => {
+      //  return []
+      // })
+      fetchData()
+      setQuizStarted(prevState => !prevState);
     }
 
   return (
@@ -169,9 +163,10 @@ const handleReplayBtn = () => {
               </>
               :
               <Intro 
-                startQuiz={startQuiz}
                 handleSettingsChange={handleSettingsChange}
                 amount={quizSettings.amount}
+                diff={quizSettings.difficulty}
+                cat={quizSettings.category}
                 handleStart={fetchData}
                 />
           }

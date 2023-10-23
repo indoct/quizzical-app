@@ -1,17 +1,12 @@
 import React from "react"
 
 export default function Intro(props) {
-    const [value,onChange]=React.useState(1);
-    
+
     return (
         <section className="intro">
             <h1>Quizzical</h1>
             <h2>Let's get quizzical</h2>
             <form id="setup">
-                <div className="quiz-setup">
-                <label htmlFor="amount">Number of Questions:</label>
-                <br /><input type="number" name="amount" id="amount" min="5" max="50" value={props.amount} onChange={props.handleSettingsChange} />
-                </div>
                 <div className="quiz-setup">
                     <label htmlFor="category">Select Category: </label>
                     <br /><select id="category" name="category" onChange={props.handleSettingsChange}>
@@ -51,6 +46,10 @@ export default function Intro(props) {
                         <option value="hard">Hard</option>
 		            </select>
                 </div>
+                {/* <div className="quiz-setup">
+                    <label htmlFor="amount">Number of Questions:</label>
+                    <br /><input type="number" name="amount" id="amount" min="5" max="50" value={props.amount} onChange={props.handleSettingsChange} disabled={props.cat || props.diff} />
+                </div> */}
             </form>
             <button onClick={props.handleStart}>Start Quiz</button>
         </section>
