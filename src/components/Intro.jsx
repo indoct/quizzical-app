@@ -9,18 +9,12 @@ export default function Intro(props) {
             <h2>Let's get quizzical</h2>
             <form id="setup">
                 <div className="quiz-setup">
-                <label htmlFor="no_of_questions">Number of Questions:</label>
-                <br /><input type="number" name="no_of_questions" id="no_of_questions" min="5" max="50" />
-                    {/* <label htmlFor="amount-select">Number of Questions:</label>
-                    <br/>
-                        <input type="range" min="5" max="50" name="amount" id="amount-select" step="1" value={value}
-                        onChange={({ target: { value: radius } }) => { onChange(radius);}}
-                        />
-                            <span>{value}</span> */}
+                <label htmlFor="amount">Number of Questions:</label>
+                <br /><input type="number" name="amount" id="amount" min="5" max="50" value={props.amount} onChange={props.handleSettingsChange} />
                 </div>
                 <div className="quiz-setup">
-                    <label htmlFor="trivia_category">Select Category: </label>
-                    <br /><select name="trivia_category">
+                    <label htmlFor="category">Select Category: </label>
+                    <br /><select id="category" name="category" onChange={props.handleSettingsChange}>
                         <option value="any">Any Category</option>
                         <option value="9">General Knowledge</option>
                         <option value="10">Entertainment: Books</option>
@@ -49,8 +43,8 @@ export default function Intro(props) {
                     </select>
                 </div>
                 <div className="quiz-setup">
-                    <label htmlFor="trivia_difficulty">Select Difficulty: </label>
-                    <br /><select name="trivia_difficulty">
+                    <label htmlFor="difficulty">Select Difficulty: </label>
+                    <br /><select name="difficulty" id="difficulty" onChange={props.handleSettingsChange}>
                         <option value="any">Any Difficulty</option>
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
@@ -58,7 +52,7 @@ export default function Intro(props) {
 		            </select>
                 </div>
             </form>
-            <button onClick={props.startQuiz}>Start Quiz</button>
+            <button onClick={props.handleStart}>Start Quiz</button>
         </section>
     )
 }

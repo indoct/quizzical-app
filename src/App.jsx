@@ -9,8 +9,10 @@ import Intro from './components/Intro'
 function App() {
     const [quizStarted, setQuizStarted] = React.useState(false);
     const [quizArray, setQuizArray] = React.useState([]);
-    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false, data_loaded: false });
-    const [quizSettings, setQuizSettings] = React.useState({ amount: 5, difficulty: '', category: ''  })
+    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false });
+    const [quizSettings, setQuizSettings] = React.useState({ amount: 5, difficulty: '', category: '' })
+
+    console.log('quiz started: ' + quizStarted)
 
     const shuffle = (array) => {
       for (let i = array.length - 1; i >= 0; i--) {
@@ -24,46 +26,53 @@ function App() {
     const generateAPIConfig = () => {
       const { amount, difficulty, category } = quizSettings;
       let configString = `https://opentdb.com/api.php?amount=${amount}`
-      return    category && difficulty ? configString  + `&difficulty=${difficulty}&category=${category}` 
-              : !category && difficulty ? configString + `&difficulty=${difficulty}`
+      return    category && difficulty ? configString  + `&category=${category}&difficulty=${difficulty}`
               : !difficulty && category ? configString + `&category=${category}`
+              : !category && difficulty ? configString + `&difficulty=${difficulty}`
               : configString
     }
+  
+  function fetchData() {
+      const apiUrl = generateAPIConfig();
+      fetch(`${apiUrl}`)
+      .then(res => res.json())
+      .then(data => {
+          setQuizArray(data.results.map(q => {  
+            const correctAns = he.decode(q.correct_answer)
+            const decodedInc = q.incorrect_answers.map(a => he.decode(a));
+            const allOptions = [correctAns, ...decodedInc]
 
-  React.useEffect(() => {
-      fetch(`${generateAPIConfig()}`)
-          .then(res => res.json())
-          .then(data => {
-            if(!quizStarted) {
-              setQuizArray(data.results.map(q => {  
-                const correctAns = he.decode(q.correct_answer)
-                const decodedInc = q.incorrect_answers.map(a => he.decode(a));
-                const allOptions = [correctAns, ...decodedInc]
-    
-                return {
-                    id:nanoid(),
-                    question: he.decode(q.question),
-                    correct: correctAns,
-                    incorrect: decodedInc,
-                    options: shuffle(allOptions),
-                    selected: ""
-                }
-              }));
+            return {
+                id:nanoid(),
+                question: he.decode(q.question),
+                correct: correctAns,
+                incorrect: decodedInc,
+                options: shuffle(allOptions),
+                selected: ""
             }
-        })
-        .then(() => setQuizState(prevDataState => ({
-          ...prevDataState,
-          data_loaded: true
-          })
-        ))
-  }, [quizStarted])
+          }));
+    })
+    // .then(() => setQuizState(prevDataState => ({
+    //   ...prevDataState,
+    //   data_loaded: true
+    //   })
+    // ))
+
+    startQuiz()
+}
 
 function startQuiz() {
-  if(quizState.data_loaded) {
   setQuizStarted(prevState => !prevState);
-  } else {
-    setTimeout(() => {setQuizStarted(prevState => !prevState)}, 100)
-  }
+}
+
+function handleSettingsChange(event) {
+  const { name, value } = event.target;
+  setQuizSettings(prevSettings => {
+    return name === 'difficulty' && value !== 'any' ? { ...prevSettings, difficulty: value }
+         : name === 'category' && value !== 'any' ? { ...prevSettings, category: value }
+         : name === 'amount' ? { ...prevSettings, amount: Number(value) }
+         : prevSettings
+  })
 }
 
 function handleChange(event) {
@@ -71,7 +80,7 @@ function handleChange(event) {
   if(!quizState.game_over) {
     setQuizState(prevState => {
       const newCount = quizArray.filter(x => x.selected.length > 0).length + 1
-      return newCount === 5 ? { ...prevState, selected_count: !prevState.selected_count } : prevState
+      return newCount === quizSettings.amount ? { ...prevState, selected_count: !prevState.selected_count } : prevState
   })
 
   for(const quizItem of quizArray) {
@@ -86,17 +95,13 @@ function handleChange(event) {
 }
 
 function selectOption(val, qid) {
-  // setAllCorrect(prevState => {
-  //   const correctCount = quizArray.filter(ans => ans.correct === ans.selected);
-  //   return correctCount.length === quizArray.length ? !prevState : prevState;
-  // })
     setQuizArray(prevQuestions => prevQuestions.map(question => {
     return question.id===qid ? {...question,  selected:val} : question
     }))
   }
 }
 
-const qaElements = quizArray.length !== 5 ? '' : quizArray.map((q,i) => {
+const qaElements = quizArray.map((q,i) => {
   return(
   <QABlock 
     key={q.id}
@@ -114,12 +119,6 @@ const qaElements = quizArray.length !== 5 ? '' : quizArray.map((q,i) => {
 
 const checkAnswers = () => {
 const correctAnswers = quizArray.filter(ans => ans.correct === ans.selected).length;
-// if(answers.length === quizArray.length) {
-//   setQuizState(prevDataState => ({
-//     ...prevDataState,
-//     all_correct: !prevDataState.all_correct
-//     }))
-// }
 return correctAnswers;
 }
 
@@ -128,6 +127,9 @@ const handleCheckBtn = () => {
         ...prevState,
         game_over: !prevState.game_over
       }))
+      setQuizSettings(() => {
+        return { amount: 5, difficulty: '', category: '' }
+      })
       checkAnswers()
     }
 
@@ -136,6 +138,9 @@ const handleReplayBtn = () => {
         selected_count: !prevState.selected_count,
         game_over: !prevState.game_over
       }))
+      setQuizArray(() => {
+       return []
+      })
       setQuizStarted(false);
 
     }
@@ -145,7 +150,7 @@ const handleReplayBtn = () => {
           {
           quizStarted ?
               <>
-              {quizState.game_over && (checkAnswers() === quizArray.length) && <Confetti />}
+              {quizState.game_over && (checkAnswers() === quizSettings.amount) && <Confetti />}
                 <form id="quiz-body">
                     {qaElements}
                 </form>
@@ -165,9 +170,9 @@ const handleReplayBtn = () => {
               :
               <Intro 
                 startQuiz={startQuiz}
-                num={quizState.num_qs}
-                cat={quizState.categories}
-                difficulty={quizState.difficulty}
+                handleSettingsChange={handleSettingsChange}
+                amount={quizSettings.amount}
+                handleStart={fetchData}
                 />
           }
       </main>
