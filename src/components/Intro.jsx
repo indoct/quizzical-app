@@ -9,12 +9,14 @@ export default function Intro(props) {
             <h2>Let's get quizzical</h2>
             <form id="setup">
                 <div className="quiz-setup">
-                    <label htmlFor="amount-select">Number of Questions:</label>
+                <label htmlFor="no_of_questions">Number of Questions:</label>
+                <br /><input type="number" name="no_of_questions" id="no_of_questions" min="5" max="50" />
+                    {/* <label htmlFor="amount-select">Number of Questions:</label>
                     <br/>
                         <input type="range" min="5" max="50" name="amount" id="amount-select" step="1" value={value}
                         onChange={({ target: { value: radius } }) => { onChange(radius);}}
                         />
-                            <span>{value}</span>
+                            <span>{value}</span> */}
                 </div>
                 <div className="quiz-setup">
                     <label htmlFor="trivia_category">Select Category: </label>

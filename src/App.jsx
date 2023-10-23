@@ -9,8 +9,8 @@ import Intro from './components/Intro'
 function App() {
     const [quizStarted, setQuizStarted] = React.useState(false);
     const [quizArray, setQuizArray] = React.useState([]);
-    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false, data_loaded: false, num_qs: 5, difficulty: 'Easy', categories: [] });
-    const [allCorrect, setAllCorrect] = React.useState(false)
+    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false, data_loaded: false });
+    const [quizSettings, setQuizSettings] = React.useState({ amount: 5, difficulty: '', category: ''  })
 
     const shuffle = (array) => {
       for (let i = array.length - 1; i >= 0; i--) {
@@ -21,11 +21,19 @@ function App() {
          return array;
     }
 
+    const generateAPIConfig = () => {
+      const { amount, difficulty, category } = quizSettings;
+      let configString = `https://opentdb.com/api.php?amount=${amount}`
+      return    category && difficulty ? configString  + `&difficulty=${difficulty}&category=${category}` 
+              : !category && difficulty ? configString + `&difficulty=${difficulty}`
+              : !difficulty && category ? configString + `&category=${category}`
+              : configString
+    }
+
   React.useEffect(() => {
-      fetch('https://opentdb.com/api.php?amount=5')
+      fetch(`${generateAPIConfig()}`)
           .then(res => res.json())
           .then(data => {
-            console.log(data)
             if(!quizStarted) {
               setQuizArray(data.results.map(q => {  
                 const correctAns = he.decode(q.correct_answer)
@@ -123,7 +131,7 @@ const handleCheckBtn = () => {
       checkAnswers()
     }
 
-const handleReplayBtn = (e) => {
+const handleReplayBtn = () => {
       setQuizState(prevState => ({
         selected_count: !prevState.selected_count,
         game_over: !prevState.game_over
