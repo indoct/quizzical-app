@@ -67,8 +67,16 @@ body {
 footer {
   margin-top: auto;
   font-size: 14px;
+  color: #0f14229e;
 }
 
+footer a {
+  text-decoration: underline;
+}
+
+footer a:hover {
+  text-decoration: none;
+}
 .intro {
   display: flex;
   flex-grow: 1;
