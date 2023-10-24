@@ -3,7 +3,7 @@ import React from "react"
 export default function Intro(props) {
 
     return (
-        <section className="intro">
+        <section>
             <h1>Quizzical</h1>
             <h2>Let's get quizzical</h2>
             <form id="setup">

@@ -140,7 +140,7 @@ const handleReplayBtn = () => {
     <>
           {
           quizStarted ?
-              <>
+              <section>
               {quizState.game_over && (checkAnswers() === quizArray.length) && <Confetti />}
                 <form id="quiz-body">
                     {qaElements}
@@ -157,7 +157,7 @@ const handleReplayBtn = () => {
                   </>
                   }
                 </div>
-              </>
+              </section>
               :
               <Intro 
                 handleSettingsChange={handleSettingsChange}

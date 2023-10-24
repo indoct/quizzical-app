@@ -77,7 +77,8 @@ footer a {
 footer a:hover {
   text-decoration: none;
 }
-.intro {
+
+section {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
