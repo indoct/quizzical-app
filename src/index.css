@@ -166,7 +166,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 #quiz-body {
-  padding: 1.6rem 2.4rem 0rem 2.4rem;
+  padding: 1.5rem 2rem 0rem;
 }
 
 legend {
@@ -196,7 +196,7 @@ fieldset:last-child {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  column-gap: 16px;
+  column-gap: 10px;
 }
 
 .options {
@@ -210,6 +210,7 @@ fieldset:last-child {
   position: relative;
   right: 0;
   top: 0;
+  width: 20px;
 }
 
 input[type="radio"] {

@@ -52,7 +52,7 @@ export default function QABlock(props) {
                     <div className="options">
                         {optionsElement}
                     </div>
-                        {gO && <span className="ui-feedback">{props.selected === props.correct ? '✔️' : '❌'}</span>}
+                        <div>{gO && <span className="ui-feedback">{props.selected === props.correct ? '✔️' : '❌'}</span>}</div>
                   </div>
                           
               </fieldset>
