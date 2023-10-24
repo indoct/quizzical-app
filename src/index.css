@@ -58,9 +58,22 @@ button:disabled:hover {
 body {
   margin: 0;
   display: flex;
+  flex-direction: column;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+footer {
+  margin-top: auto;
+  font-size: 14px;
+}
+
+.intro {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
 }
 
 h1 {
@@ -80,6 +93,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   min-width: 180px;
+  align-self: center;
 }
 button:hover {
   border-color: #646cff;
@@ -90,7 +104,7 @@ button:focus-visible {
 }
 
 .btn-container {
-  padding-bottom: 2rem;
+  padding-bottom: 1.6rem;
 }
 
 form {

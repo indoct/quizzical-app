@@ -137,7 +137,7 @@ const handleReplayBtn = () => {
     }
 
   return (
-      <main>
+    <>
           {
           quizStarted ?
               <>
@@ -164,7 +164,8 @@ const handleReplayBtn = () => {
                 handleStart={fetchData}
                 />
           }
-      </main>
+      <footer>Developed with ❤ by <strong><a href="https://scho.pro" target="_blank">scho.</a></strong></footer>
+      </>
   )
 }
 

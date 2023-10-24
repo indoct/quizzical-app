@@ -1,8 +1,12 @@
 #root {
   max-width: 800px;
-  margin: 0 auto;
-  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   text-align: center;
+  padding-top: 1.1rem;
+  padding-bottom: 10px;
+  box-sizing: border-box;
 }
 
 .logo {
