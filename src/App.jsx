@@ -5,12 +5,16 @@ import Confetti from "react-confetti"
 import './App.css'
 import QABlock from './components/QABlock'
 import Intro from './components/Intro'
+import { DarkModeSwitch } from 'react-toggle-dark-mode'
 
 function App() {
     const [quizStarted, setQuizStarted] = React.useState(false);
     const [quizArray, setQuizArray] = React.useState([]);
     const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false });
     const [quizSettings, setQuizSettings] = React.useState({ difficulty: '', category: '' })
+    const [isDarkMode, setDarkMode] = React.useState(true);
+
+    console.log(isDarkMode)
 
   const shuffle = (array) => {
       for (let i = array.length - 1; i >= 0; i--) {
@@ -54,6 +58,10 @@ function App() {
       if(!quizStarted) setQuizStarted(prevState => !prevState)
     })
 }
+
+const toggleDarkMode = (checked) => {
+  setDarkMode(checked);
+};
 
 function handleSettingsChange(event) {
   const { name, value } = event.target;
@@ -104,6 +112,7 @@ const qaElements = quizArray.map((q,i) => {
     correct={q.correct}
     handleChange={handleChange}
     quizState={quizState}
+    isDarkMode={isDarkMode}
      />
   )
 });
@@ -137,7 +146,13 @@ const handleReplayBtn = () => {
     }
 
   return (
-    <>
+    <main className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+      <div className="mode-switch"><DarkModeSwitch
+          style={{ marginBottom: '2rem' }}
+          checked={isDarkMode}
+          onChange={toggleDarkMode}
+          size={30}
+        /></div>
           {
           quizStarted ?
               <section>
@@ -164,8 +179,8 @@ const handleReplayBtn = () => {
                 handleStart={fetchData}
                 />
           }
-      <footer>Developed with ❤ by <strong><a href="https://scho.pro" target="_blank">scho.</a></strong></footer>
-      </>
+      <footer>developed with ❤ by <strong><a href="https://scho.pro" target="_blank">scho.</a></strong></footer>
+      </main>
   )
 }
 

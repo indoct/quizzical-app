@@ -5,7 +5,7 @@
   font-weight: 500;
 
   --quiz-dark: #0f1422;
-  --quiz-light: #f4f4f4cb;
+  --quiz-light: #f4f4f4;
   --quiz-tan: #eaded1;
   --quiz-slate: #96c0c5;
 
@@ -23,6 +23,19 @@
   -webkit-text-size-adjust: 100%;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -36,6 +49,10 @@ section button,
 form button,
 button {
   font-size: 1.06rem;
+}
+
+button:disabled {
+  color: #f4f4f466;
 }
 
 button:disabled:hover {
@@ -80,9 +97,10 @@ footer a:hover {
 
 section {
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
   justify-content: center;
+  max-width: 800px;
+  flex-grow: 1;
 }
 
 h1 {
@@ -173,7 +191,6 @@ input[type="number"]::-webkit-outer-spin-button {
 legend {
   font-family: "Instrument Sans", sans-serif;
   font-size: 1rem;
-  font-weight: 600;
   text-align: left;
   line-height: 1.24;
   margin-bottom: -5px;
@@ -227,6 +244,73 @@ label.ans-display {
   border-radius: 32px;
   line-height: 1;
   font-size: 0.9rem;
+}
+
+.light-mode {
+  color-scheme: light;
+  color: var(--quiz-dark);
+}
+.dark-mode {
+  color-scheme: dark;
+  background-color: var(--quiz-dark);
+  color: var(--quiz-light);
+}
+
+.dark-mode form {
+  background-color: #363e54;
+}
+
+.dark-mode fieldset {
+  border-color: #cececa38;
+}
+
+.dark-mode select {
+  background-color: #0f1422;
+  border-color: #3e4762;
+  color: var(--quiz-light);
+}
+
+.dark-mode button:not(:disabled) {
+  background-color: var(--quiz-light);
+  color: var(--quiz-dark);
+}
+
+.dark-mode footer {
+  color: #dfe7fe9e;
+}
+
+.dark-mode footer a {
+  color: #c4b4ed;
+}
+
+.dark-mode button:disabled {
+  background-color: #c4b4ed47;
+}
+.dark-mode button:disabled:hover {
+  border: 1px solid transparent;
+}
+
+.light-mode button:not(:disabled) {
+  color: var(--quiz-light);
+}
+
+.mode-switch {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+@media screen and (min-width: 821px) {
+  .mode-switch {
+    top: 20px;
+    right: 30px;
+  }
+}
+
+@media screen and (max-width: 820px) {
+  form {
+    margin: 36px 10px 0;
+  }
 }
 
 @media (prefers-color-scheme: light) {
