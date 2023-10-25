@@ -12,9 +12,7 @@ function App() {
     const [quizArray, setQuizArray] = React.useState([]);
     const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false });
     const [quizSettings, setQuizSettings] = React.useState({ difficulty: '', category: '' })
-    const [isDarkMode, setDarkMode] = React.useState(true);
-
-    console.log(isDarkMode)
+    const [isDarkMode, setDarkMode] = React.useState(JSON.parse(localStorage.getItem("isDarkMode")));
 
   const shuffle = (array) => {
       for (let i = array.length - 1; i >= 0; i--) {
@@ -58,10 +56,6 @@ function App() {
       if(!quizStarted) setQuizStarted(prevState => !prevState)
     })
 }
-
-const toggleDarkMode = (checked) => {
-  setDarkMode(checked);
-};
 
 function handleSettingsChange(event) {
   const { name, value } = event.target;
@@ -138,12 +132,14 @@ const handleReplayBtn = () => {
         selected_count: !prevState.selected_count,
         game_over: !prevState.game_over
       }))
-      // setQuizArray(() => {
-      //  return []
-      // })
       fetchData()
       setQuizStarted(prevState => !prevState);
     }
+
+const toggleDarkMode = (checked) => {
+  setDarkMode(checked);
+  localStorage.setItem("isDarkMode", JSON.stringify(checked));
+};
 
   return (
     <main className={isDarkMode ? 'dark-mode' : 'light-mode'}>

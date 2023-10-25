@@ -228,7 +228,7 @@ fieldset:last-child {
   position: relative;
   right: 0;
   top: 0;
-  width: 20px;
+  width: 22px;
 }
 
 input[type="radio"] {
@@ -252,7 +252,9 @@ label.ans-display {
 }
 .dark-mode {
   color-scheme: dark;
-  background-color: var(--quiz-dark);
+  background: var(--quiz-dark);
+  /* background-size: cover;
+  background-repeat: no-repeat; */
   color: var(--quiz-light);
 }
 

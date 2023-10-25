@@ -58,7 +58,7 @@ export default function QABlock(props) {
                     <div className="options">
                         {optionsElement}
                     </div>
-                        <div>{gO && <span className="ui-feedback">{props.selected === props.correct ? '✔️' : '❌'}</span>}</div>
+                        <div>{gO && <span className="ui-feedback"><img src={props.selected === props.correct ? '/src/assets/check.svg' : '/src/assets/cross.svg'}></img></span>}</div>
                   </div>
                           
               </fieldset>
