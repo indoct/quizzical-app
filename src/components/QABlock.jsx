@@ -1,5 +1,4 @@
 import React from "react"
-import { nanoid } from 'nanoid'
 
 export default function QABlock(props) {
     const gO = props.quizState.game_over;
