@@ -4,6 +4,7 @@ import Cross from '/src/assets/cross.svg?react';
 
 export default function QABlock(props) {
     const gO = props.quizState.game_over;
+
     const optArray=props.options.map(option => {
         return option
     })

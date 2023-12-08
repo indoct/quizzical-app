@@ -132,7 +132,6 @@ const handleReplayBtn = () => {
         selected_count: !prevState.selected_count,
         game_over: !prevState.game_over
       }))
-      fetchData()
       setQuizStarted(prevState => !prevState);
     }
 
