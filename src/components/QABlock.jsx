@@ -1,4 +1,4 @@
-import React from "react"
+import { Fragment } from "react"
 import Check from '/src/assets/check.svg?react';
 import Cross from '/src/assets/cross.svg?react';
 
@@ -31,7 +31,7 @@ export default function QABlock(props) {
     const optId = `${props.qnum}0${index+1}-${answer}`
     
           return (
-                <React.Fragment key={optId}>
+                <Fragment key={optId}>
                     <input
                       className={props.selected===answer ? 'selected' : ''}
                       type="radio"
@@ -47,7 +47,7 @@ export default function QABlock(props) {
                     key={answer} 
                     htmlFor={optId} 
                     style={styles}>{answer}</label>
-                  </React.Fragment>
+                  </Fragment>
           );
         });
              

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { nanoid } from 'nanoid'
 import he from 'he'
 import Confetti from "react-confetti"
@@ -8,11 +8,11 @@ import Intro from './components/Intro'
 import { DarkModeSwitch } from 'react-toggle-dark-mode'
 
 function App() {
-    const [quizStarted, setQuizStarted] = React.useState(false);
-    const [quizArray, setQuizArray] = React.useState([]);
-    const [quizState, setQuizState] = React.useState({ selected_count: false, game_over: false });
-    const [quizSettings, setQuizSettings] = React.useState({ difficulty: '', category: '' })
-    const [isDarkMode, setDarkMode] = React.useState(JSON.parse(localStorage.getItem("isDarkMode")));
+    const [quizStarted, setQuizStarted] = useState(false);
+    const [quizArray, setQuizArray] = useState([]);
+    const [quizState, setQuizState] = useState({ selected_count: false, game_over: false });
+    const [quizSettings, setQuizSettings] = useState({ difficulty: '', category: '' })
+    const [isDarkMode, setDarkMode] = useState(JSON.parse(localStorage.getItem("isDarkMode")));
 
   const shuffle = (array) => {
       for (let i = array.length - 1; i >= 0; i--) {
