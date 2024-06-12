@@ -1,6 +1,6 @@
 import { Fragment, FC } from "react";
-// import Check from "../src/assets/check.svg?react";
-// import Cross from "../src/assets/cross.svg?react";
+import { UilCheckCircle } from "@iconscout/react-unicons";
+import { UilTimesCircle } from "@iconscout/react-unicons";
 import { QAProps } from "../types";
 
 const QABlock: FC<QAProps> = ({
@@ -82,8 +82,18 @@ const QABlock: FC<QAProps> = ({
         <div className="options">{optionsElement}</div>
         <div>
           {gO && (
-            <span className="ui-feedback">
-              {/* {selected === correct ? <Check /> : <Cross />} */}
+            <span
+              className={
+                selected === correct
+                  ? "ui-feedback correct"
+                  : "ui-feedback incorrect"
+              }
+            >
+              {selected === correct ? (
+                <UilCheckCircle size={26} color={"#0f1422"} />
+              ) : (
+                <UilTimesCircle size={26} color={"#0f1422"} />
+              )}
             </span>
           )}
         </div>

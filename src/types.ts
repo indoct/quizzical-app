@@ -32,7 +32,6 @@ export interface SingleQuestion {
 }
 
 export interface QAProps {
-  key: string;
   qid: string;
   qnum: string;
   selected: string;

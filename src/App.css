@@ -8,6 +8,8 @@
   --quiz-light: #f4f4f4;
   --quiz-tan: #eaded1;
   --quiz-slate: #96c0c5;
+  --quiz-green: #7edd8c;
+  --quiz-red: #f29d9e;
 
   color-scheme: light dark;
   color: var(--quiz-dark);
@@ -229,7 +231,22 @@ fieldset:last-child {
   position: relative;
   right: 0;
   top: 0;
-  width: 22px;
+  width: 23px;
+  border-radius: 50%;
+  height: 23px;
+}
+
+.ui-feedback svg {
+  margin-top: -1px;
+  margin-left: -1px;
+}
+
+.incorrect {
+  background-color: var(--quiz-red);
+}
+
+.correct {
+  background-color: var(--quiz-green);
 }
 
 input[type="radio"] {
