@@ -22,6 +22,15 @@ export interface Questions {
   selected: string;
 }
 
+export interface SingleQuestion {
+  category: string;
+  correct_answer: string;
+  difficulty: string;
+  incorrect_answers: string[];
+  question: string;
+  type: string;
+}
+
 export interface QAProps {
   key: string;
   qid: string;
@@ -30,7 +39,7 @@ export interface QAProps {
   question: string;
   options: string[];
   correct: string;
-  handleChange: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   quizState: QuizState;
   isDarkMode: boolean;
 }

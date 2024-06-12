@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { nanoid } from "nanoid";
 import he from "he";
 import Confetti from "react-confetti";
 import "./App.css";
 import QABlock from "./components/QABlock";
 import Intro from "./components/Intro";
-import { QuizState, Settings, Questions } from "./types";
+import { QuizState, Settings, Questions, SingleQuestion } from "./types";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 
 const checkUserTheme = (): boolean => {
@@ -21,7 +21,7 @@ const checkUserTheme = (): boolean => {
   }
 };
 
-function App() {
+function App(): JSX.Element {
   const [quizStarted, setQuizStarted] = useState<boolean>(false);
   const [quizArray, setQuizArray] = useState<Questions[]>([]);
   const [quizState, setQuizState] = useState<QuizState>({
@@ -65,11 +65,11 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setQuizArray(
-          data.results.map((q) => {
+          data.results.map((q: SingleQuestion) => {
+            console.log(q);
             const correctAns = he.decode(q.correct_answer);
             const decodedInc = q.incorrect_answers.map((a) => he.decode(a));
             const allOptions = [correctAns, ...decodedInc];
-            console.log(Array.isArray(allOptions));
 
             return {
               id: nanoid(),
@@ -87,10 +87,8 @@ function App() {
       });
   }
 
-  function handleSettingsChange(
-    event: React.ChangeEvent<HTMLSelectElement>
-  ): void {
-    const { name, value } = event.target;
+  function handleSettingsChange(e: ChangeEvent<HTMLSelectElement>): void {
+    const { name, value } = e.target;
     setQuizSettings((prevSettings) => {
       return name === "difficulty" && value !== "any"
         ? { ...prevSettings, difficulty: value }
@@ -104,8 +102,9 @@ function App() {
     });
   }
 
-  function handleChange(event) {
-    const { value, dataset } = event.target;
+  function handleChange(e: ChangeEvent<HTMLInputElement>): void {
+    const target = e.target as HTMLButtonElement;
+    const { value, dataset } = target;
     if (!quizState.game_over) {
       setQuizState((prevState) => {
         const newCount =
@@ -126,7 +125,7 @@ function App() {
       }
     }
 
-    function selectOption(val, qid) {
+    function selectOption(val: string, qid: string): void {
       setQuizArray((prevQuestions) =>
         prevQuestions.map((question) => {
           return question.id === qid
@@ -137,7 +136,7 @@ function App() {
     }
   }
 
-  const qaElements = quizArray.map((q, i) => {
+  const qaElements: JSX.Element[] = quizArray.map((q, i) => {
     return (
       <QABlock
         key={q.id}
@@ -154,14 +153,14 @@ function App() {
     );
   });
 
-  function checkAnswers() {
+  function checkAnswers(): number {
     const correctAnswers = quizArray.filter(
       (ans) => ans.correct === ans.selected
     ).length;
     return correctAnswers;
   }
 
-  const handleCheckBtn = () => {
+  const handleCheckBtn = (): void => {
     setQuizState((prevState) => ({
       ...prevState,
       game_over: !prevState.game_over,
@@ -172,7 +171,7 @@ function App() {
     checkAnswers();
   };
 
-  const handleReplayBtn = () => {
+  const handleReplayBtn = (): void => {
     setQuizState((prevState) => ({
       selected_count: !prevState.selected_count,
       game_over: !prevState.game_over,
@@ -180,7 +179,7 @@ function App() {
     setQuizStarted((prevState) => !prevState);
   };
 
-  const toggleDarkMode = (checked) => {
+  const toggleDarkMode = (checked: boolean): void => {
     setDarkMode(checked);
     localStorage.setItem("isDarkMode", JSON.stringify(checked));
   };
