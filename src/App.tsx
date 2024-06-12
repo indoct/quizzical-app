@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { nanoid } from "nanoid";
-import he from "he";
+import { decode } from "html-entities";
 import Confetti from "react-confetti";
 import "./App.css";
 import QABlock from "./components/QABlock";
@@ -67,13 +67,13 @@ function App(): JSX.Element {
         setQuizArray(
           data.results.map((q: SingleQuestion) => {
             console.log(q);
-            const correctAns = he.decode(q.correct_answer);
-            const decodedInc = q.incorrect_answers.map((a) => he.decode(a));
+            const correctAns = decode(q.correct_answer);
+            const decodedInc = q.incorrect_answers.map((a) => decode(a));
             const allOptions = [correctAns, ...decodedInc];
 
             return {
               id: nanoid(),
-              question: he.decode(q.question),
+              question: decode(q.question),
               correct: correctAns,
               incorrect: decodedInc,
               options: shuffle(allOptions),
