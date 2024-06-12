@@ -66,7 +66,6 @@ function App(): JSX.Element {
       .then((data) => {
         setQuizArray(
           data.results.map((q: SingleQuestion) => {
-            console.log(q);
             const correctAns = decode(q.correct_answer);
             const decodedInc = q.incorrect_answers.map((a) => decode(a));
             const allOptions = [correctAns, ...decodedInc];
@@ -102,39 +101,34 @@ function App(): JSX.Element {
     });
   }
 
+  function selectOption(val: string, qid: string): void {
+    setQuizArray((prevQuestions) =>
+      prevQuestions.map((question) => {
+        return question.id === qid ? { ...question, selected: val } : question;
+      })
+    );
+  }
+
   function handleChange(e: ChangeEvent<HTMLInputElement>): void {
-    const target = e.target as HTMLButtonElement;
-    const { value, dataset } = target;
-    if (!quizState.game_over) {
-      setQuizState((prevState) => {
-        const newCount =
-          quizArray.filter((x) => x.selected.length > 0).length + 1;
-        return newCount === quizArray.length
-          ? { ...prevState, selected_count: !prevState.selected_count }
-          : prevState;
-      });
+    const { value, dataset } = e.target;
 
-      for (const quizItem of quizArray) {
-        const optArray = quizItem.options;
-        if (quizItem.id === dataset.id) {
-          for (const optItem of optArray) {
-            const qid = quizItem.id;
-            if (value === optItem) selectOption(value, qid);
-          }
-        }
-      }
-    }
-
-    function selectOption(val: string, qid: string): void {
-      setQuizArray((prevQuestions) =>
-        prevQuestions.map((question) => {
-          return question.id === qid
-            ? { ...question, selected: val }
-            : question;
-        })
-      );
+    if (!quizState.game_over && dataset.id) {
+      selectOption(value, dataset.id);
     }
   }
+
+  useEffect(() => {
+    if (!quizState.game_over) {
+      const selectedCount = quizArray.filter(
+        (x) => x.selected.length > 0
+      ).length;
+      const allSelected = selectedCount === quizArray.length;
+      setQuizState((prevState) => ({
+        ...prevState,
+        selected_count: allSelected,
+      }));
+    }
+  }, [quizArray, quizState.game_over]);
 
   const qaElements: JSX.Element[] = quizArray.map((q, i) => {
     return (
