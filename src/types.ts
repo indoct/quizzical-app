@@ -1,3 +1,8 @@
+export interface QuizError extends Error {
+  title: string;
+  response_code: number;
+}
+
 export interface IntroProps {
   handleSettingsChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleStart: () => void;

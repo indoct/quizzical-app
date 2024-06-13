@@ -1,3 +1,5 @@
+import { QuizError } from "../types";
+
 export const fetchQuizData = async (
   category: string | null,
   difficulty: string | null
@@ -9,14 +11,52 @@ export const fetchQuizData = async (
   const response = await fetch(
     `https://opentdb.com/api.php?amount=10${categoryParam}${difficultyParam}`
   );
-  if (!response.ok) {
-    throw new Error(`Failed to fetch quiz data: ${response.statusText}`);
-  }
+
   const data = await response.json();
-  if (data.response_code !== 0) {
-    throw new Error(
-      "No quiz data available for the selected category and difficulty."
-    );
+
+  const createQuizError = (
+    title: string,
+    message: string,
+    response_code: number
+  ): QuizError => {
+    const error = new Error(message) as QuizError;
+    error.title = title;
+    error.response_code = response_code;
+    return error;
+  };
+
+  switch (data.response_code) {
+    case 1:
+      throw createQuizError(
+        "No Data Available",
+        "No quiz data available for the selected category and difficulty.",
+        1
+      );
+    case 2:
+      throw createQuizError(
+        "Invalid Parameter",
+        "Contains an invalid parameter. Arguments passed in aren't valid. (Ex. Amount = Five)",
+        2
+      );
+    case 3:
+      throw createQuizError(
+        "Token Not Found",
+        "Session Token does not exist.",
+        3
+      );
+    case 4:
+      throw createQuizError(
+        "Token Empty Session",
+        "Token has returned all possible questions for the specified query. Resetting the Token is necessary.",
+        4
+      );
+    case 5:
+      throw createQuizError(
+        "Rate Limit Hit",
+        "Too many requests have occurred. Each IP can only access the API once every 5 seconds.",
+        5
+      );
+    default:
+      return data;
   }
-  return data;
 };
