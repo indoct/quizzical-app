@@ -38,6 +38,7 @@ const QuizPage: React.FC = () => {
             correct: correctAns,
             incorrect: decodedInc,
             options: shuffle(allOptions),
+            category: decode(q.category),
             selected: "",
           };
         });
@@ -52,6 +53,8 @@ const QuizPage: React.FC = () => {
         setLoading(false);
       });
   }, [loaderData]);
+
+  console.log(quizArray);
 
   useEffect(() => {
     if (quizState.active) {

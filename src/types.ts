@@ -3,11 +3,6 @@ export interface QuizError extends Error {
   response_code: number;
 }
 
-export interface IntroProps {
-  handleSettingsChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleStart: () => void;
-}
-
 export type QuizState = {
   selected_count: boolean;
   active: boolean;
@@ -24,6 +19,7 @@ export interface Questions {
   correct: string;
   incorrect: string[];
   options: string[];
+  category: string;
   selected: string;
 }
 
@@ -41,15 +37,3 @@ export interface SingleQuestion {
   question: string;
   type: string;
 }
-
-// export interface QuizProps {
-//   qid: string;
-//   qnum: string;
-//   selected: string;
-//   question: string;
-//   options: string[];
-//   correct: string;
-//   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-//   quizState: QuizState;
-//   isDarkMode: boolean;
-// }
