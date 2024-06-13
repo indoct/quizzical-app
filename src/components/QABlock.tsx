@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { QABlockProps } from "../types";
 
-// import { UilCheckCircle } from "@iconscout/react-unicons";
-// import { UilTimesCircle } from "@iconscout/react-unicons";
+import { UilCheckCircle } from "@iconscout/react-unicons";
+import { UilTimesCircle } from "@iconscout/react-unicons";
 
-const QABlock: React.FC<QABlockProps> = ({ data, handleChange }) => {
+const QABlock: React.FC<QABlockProps> = ({ data, handleChange, quizState }) => {
   return (
     <div>
       {data.map((question, i) => {
@@ -13,7 +13,7 @@ const QABlock: React.FC<QABlockProps> = ({ data, handleChange }) => {
           <fieldset key={question.id}>
             <legend>{question.question}</legend>
             <div className="opt-container">
-              <ul className="options">
+              <div className="options">
                 {question.options.map((option, i) => {
                   const optId: string = `${qnum}0${i + 1}-${option}`;
                   return (
@@ -45,7 +45,24 @@ const QABlock: React.FC<QABlockProps> = ({ data, handleChange }) => {
                     </Fragment>
                   );
                 })}
-              </ul>
+              </div>
+              <div>
+                {!quizState.active && (
+                  <span
+                    className={
+                      question.selected === question.correct
+                        ? "ui-feedback correct"
+                        : "ui-feedback incorrect"
+                    }
+                  >
+                    {question.selected === question.correct ? (
+                      <UilCheckCircle size={26} color={"#0f1422"} />
+                    ) : (
+                      <UilTimesCircle size={26} color={"#0f1422"} />
+                    )}
+                  </span>
+                )}
+              </div>
             </div>
           </fieldset>
         );
@@ -133,23 +150,23 @@ export default QABlock;
 //       <legend>{question}</legend>
 //       <div className="opt-container">
 //         <div className="options">{optionsElement}</div>
-//         <div>
-//           {gO && (
-//             <span
-//               className={
-//                 selected === correct
-//                   ? "ui-feedback correct"
-//                   : "ui-feedback incorrect"
-//               }
-//             >
-//               {selected === correct ? (
-//                 <UilCheckCircle size={26} color={"#0f1422"} />
-//               ) : (
-//                 <UilTimesCircle size={26} color={"#0f1422"} />
-//               )}
-//             </span>
-//           )}
-//         </div>
+// <div>
+//   {gO && (
+//     <span
+//       className={
+//         selected === correct
+//           ? "ui-feedback correct"
+//           : "ui-feedback incorrect"
+//       }
+//     >
+//       {selected === correct ? (
+//         <UilCheckCircle size={26} color={"#0f1422"} />
+//       ) : (
+//         <UilTimesCircle size={26} color={"#0f1422"} />
+//       )}
+//     </span>
+//   )}
+// </div>
 //       </div>
 //     </fieldset>
 //   );

@@ -10,7 +10,7 @@ export interface IntroProps {
 
 export type QuizState = {
   selected_count: boolean;
-  game_active: boolean;
+  active: boolean;
 };
 
 export type Settings = {
@@ -30,6 +30,7 @@ export interface Questions {
 export interface QABlockProps {
   data: Questions[];
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  quizState: QuizState;
 }
 
 export interface SingleQuestion {

@@ -9,10 +9,11 @@ const QuizPage: React.FC = () => {
   const loaderData = useLoaderData() as { quizData: Promise<any> };
   const [quizState, setQuizState] = useState<QuizState>({
     selected_count: false,
-    game_active: false,
+    active: false,
   });
   const [quizArray, setQuizArray] = useState<Questions[]>([]);
   const [loading, setLoading] = useState(true);
+  // const [gameOver, setGameOver] = useState<boolean>(false)
 
   const shuffle = (array: string[]): string[] => {
     for (let i = array.length - 1; i >= 0; i--) {
@@ -42,7 +43,7 @@ const QuizPage: React.FC = () => {
         });
         setQuizArray(processedData);
         setQuizState((prevState) => {
-          return { ...prevState, game_active: true };
+          return { ...prevState, active: true };
         });
         setLoading(false);
       })
@@ -53,7 +54,7 @@ const QuizPage: React.FC = () => {
   }, [loaderData]);
 
   useEffect(() => {
-    if (quizState.game_active) {
+    if (quizState.active) {
       const selectedCount = quizArray.filter(
         (x) => x.selected.length > 0
       ).length;
@@ -63,7 +64,7 @@ const QuizPage: React.FC = () => {
         selected_count: allSelected,
       }));
     }
-  }, [quizArray, quizState.game_active]);
+  }, [quizArray, quizState.active]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -85,6 +86,14 @@ const QuizPage: React.FC = () => {
     );
   };
 
+  function uiMessage(): string {
+    return !quizState.selected_count && quizState.active
+      ? "Please select an answer for every question"
+      : quizState.selected_count && quizState.active
+      ? "Good to go!"
+      : `You scored ${checkAnswers()}/${quizArray.length} correct answers.`;
+  }
+
   function checkAnswers(): number {
     const correctAnswers = quizArray.filter(
       (ans) => ans.correct === ans.selected
@@ -95,7 +104,7 @@ const QuizPage: React.FC = () => {
   const handleCheckBtn = (): void => {
     setQuizState((prevState) => ({
       ...prevState,
-      game_active: !prevState.game_active,
+      active: !prevState.active,
     }));
     checkAnswers();
   };
@@ -103,37 +112,27 @@ const QuizPage: React.FC = () => {
   const handleReplayBtn = (): void => {
     setQuizState((prevState) => ({
       selected_count: !prevState.selected_count,
-      game_active: !prevState.game_active,
+      active: !prevState.active,
     }));
   };
 
   return (
     <form id="quiz-body">
-      <QABlock data={quizArray} handleChange={handleChange} />
+      <QABlock
+        data={quizArray}
+        handleChange={handleChange}
+        quizState={quizState}
+      />
       <div className="btn-container">
-        {!quizState.game_active ? (
-          <>
-            <p className="answer-text">
-              You scored {checkAnswers()}/{quizArray.length} correct answers.
-            </p>
-            <button onClick={handleReplayBtn}>Play Again</button>
-          </>
-        ) : (
-          <>
-            <p className="answer-text">
-              {!quizState.selected_count
-                ? "Please select an answer for every question"
-                : "Good to go!"}
-            </p>
-            <button
-              onClick={handleCheckBtn}
-              disabled={!quizState.selected_count || !quizState.game_active}
-              id="check-answer"
-            >
-              Check Answers
-            </button>
-          </>
-        )}
+        <p className="answer-text">{uiMessage()}</p>
+        <button
+          type="button"
+          onClick={handleCheckBtn}
+          disabled={!quizState.selected_count || !quizState.active}
+          id="check-answer"
+        >
+          Check Answers
+        </button>
       </div>
     </form>
   );
