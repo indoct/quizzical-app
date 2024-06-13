@@ -10,7 +10,7 @@ export interface IntroProps {
 
 export type QuizState = {
   selected_count: boolean;
-  game_over: boolean;
+  game_active: boolean;
 };
 
 export type Settings = {
@@ -41,14 +41,14 @@ export interface SingleQuestion {
   type: string;
 }
 
-export interface QuizProps {
-  qid: string;
-  qnum: string;
-  selected: string;
-  question: string;
-  options: string[];
-  correct: string;
-  // handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  // quizState: QuizState;
-  // isDarkMode: boolean;
-}
+// export interface QuizProps {
+//   qid: string;
+//   qnum: string;
+//   selected: string;
+//   question: string;
+//   options: string[];
+//   correct: string;
+//   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+//   quizState: QuizState;
+//   isDarkMode: boolean;
+// }

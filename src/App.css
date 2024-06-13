@@ -263,7 +263,7 @@ fieldset:last-child {
   color: var(--quiz-light);
 }
 
-.ans-display:hover {
+.answer:hover {
   cursor: pointer;
 }
 
@@ -281,7 +281,7 @@ input[type="radio"] {
   width: 0;
 }
 
-label.ans-display {
+label.answer {
   border: 1px solid var(--quiz-dark);
   transition: all 0.3s;
   padding: 0.4rem 1rem;

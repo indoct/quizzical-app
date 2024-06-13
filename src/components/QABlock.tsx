@@ -33,8 +33,8 @@ const QABlock: React.FC<QABlockProps> = ({ data, handleChange }) => {
                       <label
                         className={
                           question.selected === option
-                            ? "ans-selected ans-display"
-                            : "ans-display"
+                            ? "ans-selected answer"
+                            : "answer"
                         }
                         key={option}
                         htmlFor={optId}
@@ -117,7 +117,7 @@ export default QABlock;
 //           onChange={(e) => handleChange(e)}
 //         />
 //         <label
-//           className="ans-display"
+//           className="answer"
 //           key={answer}
 //           htmlFor={optId}
 //           style={styles}
