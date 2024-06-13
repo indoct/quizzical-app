@@ -27,6 +27,11 @@ export interface Questions {
   selected: string;
 }
 
+export interface QABlockProps {
+  data: Questions[];
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 export interface SingleQuestion {
   category: string;
   correct_answer: string;
@@ -36,7 +41,7 @@ export interface SingleQuestion {
   type: string;
 }
 
-export interface QAProps {
+export interface QuizProps {
   qid: string;
   qnum: string;
   selected: string;

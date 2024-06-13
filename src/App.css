@@ -258,6 +258,15 @@ fieldset:last-child {
   margin-left: -1px;
 }
 
+.ans-selected {
+  background-color: var(--quiz-dark);
+  color: var(--quiz-light);
+}
+
+.ans-display:hover {
+  cursor: pointer;
+}
+
 .incorrect {
   background-color: var(--quiz-red);
 }

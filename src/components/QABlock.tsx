@@ -1,34 +1,55 @@
-// import { Fragment, useState, useEffect } from "react";
-// import { Questions, SingleQuestion } from "../types";
-// import { shuffle } from "../utils/utils";
-// import { decode } from "html-entities";
-// import { nanoid } from "nanoid";
-import { QAProps } from "../types";
+import { Fragment } from "react";
+import { QABlockProps } from "../types";
 
 // import { UilCheckCircle } from "@iconscout/react-unicons";
 // import { UilTimesCircle } from "@iconscout/react-unicons";
-// import { QAProps } from "../types";
 
-// interface QuizProps {
-//   data: any;
-// }
-
-const QABlock: React.FC<QAProps> = ({ data }) => {
-  console.log(data);
-  // Render your quiz questions and answers using the data prop
+const QABlock: React.FC<QABlockProps> = ({ data, handleChange }) => {
   return (
     <div>
-      {data.results.map((question: any, index: number) => (
-        <div key={index}>
-          <h3>{question.question}</h3>
-          <ul>
-            {question.incorrect_answers.map((answer: string, i: number) => (
-              <li key={i}>{answer}</li>
-            ))}
-            <li>{question.correct_answer}</li>
-          </ul>
-        </div>
-      ))}
+      {data.map((question, i) => {
+        const qnum: number = i + 1;
+        return (
+          <fieldset key={question.id}>
+            <legend>{question.question}</legend>
+            <div className="opt-container">
+              <ul className="options">
+                {question.options.map((option, i) => {
+                  const optId: string = `${qnum}0${i + 1}-${option}`;
+                  return (
+                    <Fragment key={optId}>
+                      <input
+                        className={
+                          question.selected === option ? "selected" : ""
+                        }
+                        type="radio"
+                        id={optId}
+                        name={option}
+                        checked={question.selected === option}
+                        value={option}
+                        data-id={question.id}
+                        onChange={handleChange}
+                      />
+                      <label
+                        className={
+                          question.selected === option
+                            ? "ans-selected ans-display"
+                            : "ans-display"
+                        }
+                        key={option}
+                        htmlFor={optId}
+                        // style={styles}
+                      >
+                        {option}
+                      </label>
+                    </Fragment>
+                  );
+                })}
+              </ul>
+            </div>
+          </fieldset>
+        );
+      })}
     </div>
   );
 };

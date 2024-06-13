@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import QABlock from "../components/QABlock";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { Questions, SingleQuestion } from "../types";
 import { shuffle } from "../utils/utils";
 import { decode } from "html-entities";
@@ -14,7 +14,6 @@ const QuizPage: React.FC = () => {
   useEffect(() => {
     loaderData.quizData
       .then((data) => {
-        console.log(data);
         const processedData = data.results.map((q: SingleQuestion) => {
           const correctAns = decode(q.correct_answer);
           const decodedInc = q.incorrect_answers.map((a) => decode(a));
@@ -42,10 +41,25 @@ const QuizPage: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { value, dataset } = e.target;
+
+    if (dataset.id) {
+      selectOption(value, dataset.id);
+    }
+  };
+
+  const selectOption = (val: string, qid: string): void => {
+    setQuizArray((prevQuestions) =>
+      prevQuestions.map((question) => {
+        return question.id === qid ? { ...question, selected: val } : question;
+      })
+    );
+  };
+
   return (
     <div>
-      <h2>Quiz</h2>
-      <QABlock data={quizArray} />
+      <QABlock data={quizArray} handleChange={handleChange} />
     </div>
   );
 };
