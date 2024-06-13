@@ -1,32 +1,30 @@
 import { Fragment } from "react";
 import { QABlockProps } from "../types";
-
 import { UilCheckCircle } from "@iconscout/react-unicons";
 import { UilTimesCircle } from "@iconscout/react-unicons";
 
 const QABlock: React.FC<QABlockProps> = ({ data, handleChange, quizState }) => {
   return (
     <div>
-      {data.map((question, i) => {
-        const qnum: number = i + 1;
+      {data.map((question, qIndex) => {
+        const qnum: number = qIndex + 1;
         return (
-          <>
-            {/* <span className="cat">{question.category}</span> */}
-            <fieldset key={question.id}>
+          <Fragment key={question.id}>
+            <fieldset>
               <legend>{question.question}</legend>
               <div className="opt-container">
                 <div className="options">
-                  {question.options.map((option, i) => {
-                    const optId: string = `${qnum}0${i + 1}-${option}`;
+                  {question.options.map((option, oIndex) => {
+                    const optId: string = `${qnum}0${oIndex + 1}-${option}`;
                     return (
-                      <Fragment key={optId}>
+                      <div key={optId}>
                         <input
                           className={
                             question.selected === option ? "selected" : ""
                           }
                           type="radio"
                           id={optId}
-                          name={option}
+                          name={question.id} // Updated to use question.id to group options per question
                           checked={question.selected === option}
                           value={option}
                           data-id={question.id}
@@ -52,12 +50,11 @@ const QABlock: React.FC<QABlockProps> = ({ data, handleChange, quizState }) => {
                               ? "answer go"
                               : "answer"
                           }
-                          key={option}
                           htmlFor={optId}
                         >
                           {option}
                         </label>
-                      </Fragment>
+                      </div>
                     );
                   })}
                 </div>
@@ -80,7 +77,7 @@ const QABlock: React.FC<QABlockProps> = ({ data, handleChange, quizState }) => {
                 </div>
               </div>
             </fieldset>
-          </>
+          </Fragment>
         );
       })}
     </div>

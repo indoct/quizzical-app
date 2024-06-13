@@ -134,7 +134,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.btn-container {
+.feedback {
   padding-bottom: 1.6rem;
 }
 
@@ -196,6 +196,11 @@ select {
 .quiz-setup input:disabled::-webkit-inner-spin-button {
   color: grey;
   opacity: 0 !important;
+}
+
+.error-block {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* ensures the increment/decrement arrows always display */
@@ -272,11 +277,6 @@ fieldset:last-child {
   margin-left: -1px;
 }
 
-.ans-selected {
-  background-color: var(--quiz-dark);
-  color: var(--quiz-light);
-}
-
 .answer:hover {
   cursor: pointer;
 }
@@ -300,7 +300,8 @@ input[type="radio"] {
 /* UI Answer Feedback */
 
 .dark-mode .incorrect.go,
-.incorrect {
+.incorrect,
+.ans-selected.incorrect {
   background-color: var(--quiz-red);
 }
 
@@ -311,7 +312,9 @@ input[type="radio"] {
 }
 
 .correct,
-.dark-mode .correct.go {
+.ans-selected.correct,
+.dark-mode .correct.go,
+.dark-mode .correct.answer {
   background-color: var(--quiz-green);
   color: var(--quiz-dark);
 }
@@ -320,9 +323,34 @@ input[type="radio"] {
   opacity: 0.65;
 }
 
-.dark-mode .go {
+.dark-mode .answer {
   background-color: #2a3040;
+}
+
+.ans-selected {
+  background-color: var(--quiz-dark);
+  color: var(--quiz-light);
+}
+
+.dark-mode .ans-selected {
+  background-color: #c4b4ed;
+  color: var(--quiz-dark);
+  font-weight: 600;
+}
+
+.dark-mode .go {
   color: #9fa2ac;
+}
+
+.btn-container {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-sub {
+  display: block;
+  padding-top: 2px;
+  font-size: 0.8rem;
 }
 
 /* Theme Styling */

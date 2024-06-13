@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import QABlock from "../components/QABlock";
 import { useState, useEffect, ChangeEvent } from "react";
 import { Questions, SingleQuestion, QuizState } from "../types";
@@ -13,7 +13,8 @@ const QuizPage: React.FC = () => {
   });
   const [quizArray, setQuizArray] = useState<Questions[]>([]);
   const [loading, setLoading] = useState(true);
-  // const [gameOver, setGameOver] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const shuffle = (array: string[]): string[] => {
     for (let i = array.length - 1; i >= 0; i--) {
@@ -46,15 +47,16 @@ const QuizPage: React.FC = () => {
         setQuizState((prevState) => {
           return { ...prevState, active: true };
         });
+
         setLoading(false);
       })
       .catch((error) => {
+        console.log(error.name, error.message);
         console.error("Failed to process quiz data:", error);
+        setError(`Failed to fetch quiz data: ${error.message}`);
         setLoading(false);
       });
   }, [loaderData]);
-
-  console.log(quizArray);
 
   useEffect(() => {
     if (quizState.active) {
@@ -113,11 +115,28 @@ const QuizPage: React.FC = () => {
   };
 
   const handleReplayBtn = (): void => {
-    setQuizState((prevState) => ({
-      selected_count: !prevState.selected_count,
-      active: !prevState.active,
-    }));
+    navigate(
+      `/quiz?category=${new URLSearchParams(window.location.search).get(
+        "category"
+      )}&difficulty=${new URLSearchParams(window.location.search).get(
+        "difficulty"
+      )}&t=${Date.now()}`
+    );
   };
+
+  const handleNewSettings = (): void => {
+    navigate("/");
+  };
+
+  if (error) {
+    return (
+      <div className="error-block">
+        <h2>Sorry, an unexpected error has occurred.</h2>
+        <p>{error}</p>
+        <button>Try Again</button>
+      </div>
+    );
+  }
 
   return (
     <form id="quiz-body">
@@ -126,16 +145,27 @@ const QuizPage: React.FC = () => {
         handleChange={handleChange}
         quizState={quizState}
       />
-      <div className="btn-container">
+      <div className="feedback">
         <p className="answer-text">{uiMessage()}</p>
-        <button
-          type="button"
-          onClick={handleCheckBtn}
-          disabled={!quizState.selected_count || !quizState.active}
-          id="check-answer"
-        >
-          Check Answers
-        </button>
+        {quizState.active ? (
+          <button
+            type="button"
+            onClick={handleCheckBtn}
+            disabled={!quizState.selected_count || !quizState.active}
+            id="check-answer"
+          >
+            Check Answers
+          </button>
+        ) : (
+          <div className="btn-container">
+            <button type="button" onClick={handleNewSettings}>
+              Change Settings <span className="btn-sub">(← Go Back)</span>
+            </button>
+            <button type="button" onClick={handleReplayBtn}>
+              Play Again <span className="btn-sub">(New Questions)</span>
+            </button>
+          </div>
+        )}
       </div>
     </form>
   );
