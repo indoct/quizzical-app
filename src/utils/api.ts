@@ -9,7 +9,7 @@ export const fetchQuizData = async (
   const difficultyParam =
     difficulty && difficulty !== "any" ? `&difficulty=${difficulty}` : "";
   const response = await fetch(
-    `https://opentdb.com/api.php?amount=10${categoryParam}${difficultyParam}`
+    `https://opentdb.com/api.php?amount=5${categoryParam}${difficultyParam}`
   );
 
   const data = await response.json();

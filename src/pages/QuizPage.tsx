@@ -7,7 +7,6 @@ const QuizPage: React.FC = () => {
 
   return (
     <div>
-      <h2>Quiz</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={quizData}>{(data) => <QABlock data={data} />}</Await>
       </Suspense>
