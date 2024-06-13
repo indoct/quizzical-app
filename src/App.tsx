@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 
@@ -17,10 +17,6 @@ const checkUserTheme = (): boolean => {
 
 const App: FC = () => {
   const [isDarkMode, setDarkMode] = useState<boolean>(checkUserTheme);
-
-  useEffect(() => {
-    localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
-  }, [isDarkMode]);
 
   const toggleDarkMode = (checked: boolean): void => {
     setDarkMode(checked);

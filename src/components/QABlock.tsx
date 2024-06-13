@@ -1,13 +1,20 @@
-// import { Fragment, FC } from "react";
+// import { Fragment, useState, useEffect } from "react";
+// import { Questions, SingleQuestion } from "../types";
+// import { shuffle } from "../utils/utils";
+// import { decode } from "html-entities";
+// import { nanoid } from "nanoid";
+import { QAProps } from "../types";
+
 // import { UilCheckCircle } from "@iconscout/react-unicons";
 // import { UilTimesCircle } from "@iconscout/react-unicons";
 // import { QAProps } from "../types";
 
-interface QuizProps {
-  data: any;
-}
+// interface QuizProps {
+//   data: any;
+// }
 
-const Quiz: React.FC<QuizProps> = ({ data }) => {
+const QABlock: React.FC<QAProps> = ({ data }) => {
+  console.log(data);
   // Render your quiz questions and answers using the data prop
   return (
     <div>
@@ -26,7 +33,7 @@ const Quiz: React.FC<QuizProps> = ({ data }) => {
   );
 };
 
-export default Quiz;
+export default QABlock;
 
 // const QABlock: FC<QAProps> = ({
 //   qid,

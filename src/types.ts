@@ -43,7 +43,7 @@ export interface QAProps {
   question: string;
   options: string[];
   correct: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  quizState: QuizState;
-  isDarkMode: boolean;
+  // handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // quizState: QuizState;
+  // isDarkMode: boolean;
 }
