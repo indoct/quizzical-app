@@ -15,13 +15,8 @@ const QuizPage: React.FC = () => {
   const [quizArray, setQuizArray] = useState<Questions[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<QuizError | null>(null);
-  const [retrying, setRetrying] = useState<boolean>(false);
-  // const [countdown, setCountdown] = useState<number>(5);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
 
   const shuffle = (array: string[]): string[] => {
     for (let i = array.length - 1; i >= 0; i--) {
@@ -60,11 +55,8 @@ const QuizPage: React.FC = () => {
         return { ...prevState, active: true };
       });
       setLoading(false);
-      // setRetrying(false); // Set retrying to false on successful API call
     } catch (err) {
-      console.log(err);
       setLoading(false);
-      // setRetrying(true);
       setError(err as QuizError);
     }
   };
@@ -152,10 +144,6 @@ const QuizPage: React.FC = () => {
   if (loading) {
     return <div>Retrieving and loading trivia questions, please hold...</div>;
   }
-
-  // if (retrying && !loading) {
-  //   return <ErrorCountdown initialSeconds={5} />;
-  // }
 
   if (error) {
     return error.response_code !== 5 ? (

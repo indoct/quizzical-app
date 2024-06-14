@@ -21,8 +21,17 @@ const useCountdown = (initialSeconds: number) => {
   return countdown;
 };
 
-const ErrorCountdown: React.FC<ErrorCountdownProps> = ({ initialSeconds }) => {
+const ErrorCountdown: React.FC<ErrorCountdownProps> = ({
+  initialSeconds,
+  handleRetry,
+}) => {
   const countdown = useCountdown(initialSeconds);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      handleRetry();
+    }
+  }, [countdown, handleRetry]);
 
   return (
     <div>
