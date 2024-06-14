@@ -9,8 +9,18 @@ export const fetchQuizData = async (
   const difficultyParam =
     difficulty && difficulty !== "any" ? `&difficulty=${difficulty}` : "";
   const response = await fetch(
-    `https://opentdb.com/api.php?amount=5${categoryParam}${difficultyParam}`
+    `https://opentdb.com/api.php?amount=5000${categoryParam}${difficultyParam}`
   );
+
+  if (!response.ok && response.status !== 429) {
+    const error: QuizError = {
+      name: Error.name,
+      title: "API Error",
+      message: "An error occurred while fetching quiz data.",
+      response_code: -1,
+    };
+    throw error;
+  }
 
   const data = await response.json();
 
@@ -22,6 +32,7 @@ export const fetchQuizData = async (
     const error = new Error(message) as QuizError;
     error.title = title;
     error.response_code = response_code;
+    console.log(error);
     return error;
   };
 

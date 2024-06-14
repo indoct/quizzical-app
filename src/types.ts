@@ -1,5 +1,6 @@
 export interface QuizError extends Error {
   title: string;
+  message: string;
   response_code: number;
 }
 
