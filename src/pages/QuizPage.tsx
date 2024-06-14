@@ -6,6 +6,7 @@ import { decode } from "html-entities";
 import { nanoid } from "nanoid";
 import { fetchQuizData } from "../utils/api";
 import ErrorCountdown from "../components/ErrorCountdown";
+import ReactConfetti from "react-confetti";
 
 const QuizPage: React.FC = () => {
   const [quizState, setQuizState] = useState<QuizState>({
@@ -15,6 +16,7 @@ const QuizPage: React.FC = () => {
   const [quizArray, setQuizArray] = useState<Questions[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<QuizError | null>(null);
+  const [gameOver, setGameOver] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,6 +33,9 @@ const QuizPage: React.FC = () => {
     category: string | null,
     difficulty: string | null
   ) => {
+    console.log(
+      "running fetchData in QuizPage " + new Date().getMilliseconds()
+    );
     setLoading(true);
     setError(null);
 
@@ -117,20 +122,12 @@ const QuizPage: React.FC = () => {
       ...prevState,
       active: !prevState.active,
     }));
+    setGameOver(true);
     checkAnswers();
   };
 
-  const handleReplayBtn = (): void => {
-    navigate(
-      `/quiz?category=${new URLSearchParams(window.location.search).get(
-        "category"
-      )}&difficulty=${new URLSearchParams(window.location.search).get(
-        "difficulty"
-      )}&t=${Date.now()}`
-    );
-  };
-
   const handleRetry = (): void => {
+    if (gameOver) setGameOver(false);
     const params = new URLSearchParams(location.search);
     const category = params.get("category");
     const difficulty = params.get("difficulty");
@@ -138,6 +135,7 @@ const QuizPage: React.FC = () => {
   };
 
   const handleNewSettings = (): void => {
+    setGameOver(false);
     navigate("/");
   };
 
@@ -165,15 +163,16 @@ const QuizPage: React.FC = () => {
 
   return (
     <form id="quiz-body">
+      {gameOver && checkAnswers() === quizArray.length && <ReactConfetti />}
       <QABlock
         data={quizArray}
         handleChange={handleChange}
         quizState={quizState}
       />
       <div className="feedback">
+        <p className="answer-text">{uiMessage()}</p>
         {quizState.active && (
           <>
-            <p className="answer-text">{uiMessage()}</p>
             <button
               type="button"
               onClick={handleCheckBtn}
@@ -184,13 +183,13 @@ const QuizPage: React.FC = () => {
             </button>
           </>
         )}{" "}
-        {quizState.active && !loading && !quizState.selected_count && (
+        {gameOver && (
           <div className="btn-container">
             <button type="button" onClick={handleNewSettings}>
-              Change Settings <span className="btn-sub">(← Go Back)</span>
+              Change Settings
             </button>
-            <button type="button" onClick={handleReplayBtn}>
-              Play Again <span className="btn-sub">(New Questions)</span>
+            <button type="button" onClick={handleRetry}>
+              Play Again
             </button>
           </div>
         )}

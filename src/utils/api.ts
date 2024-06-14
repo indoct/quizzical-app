@@ -4,12 +4,15 @@ export const fetchQuizData = async (
   category: string | null,
   difficulty: string | null
 ) => {
+  console.log(
+    "running fetchQuizData in api.ts " + new Date().getMilliseconds()
+  );
   const categoryParam =
     category && category !== "any" ? `&category=${category}` : "";
   const difficultyParam =
     difficulty && difficulty !== "any" ? `&difficulty=${difficulty}` : "";
   const response = await fetch(
-    `https://opentdb.com/api.php?amount=5000${categoryParam}${difficultyParam}`
+    `https://opentdb.com/api.php?amount=5${categoryParam}${difficultyParam}`
   );
 
   if (!response.ok && response.status !== 429) {
@@ -23,7 +26,7 @@ export const fetchQuizData = async (
   }
 
   const data = await response.json();
-
+  console.log(data);
   const createQuizError = (
     title: string,
     message: string,
@@ -32,7 +35,6 @@ export const fetchQuizData = async (
     const error = new Error(message) as QuizError;
     error.title = title;
     error.response_code = response_code;
-    console.log(error);
     return error;
   };
 
