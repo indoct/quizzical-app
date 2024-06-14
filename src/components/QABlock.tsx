@@ -24,7 +24,7 @@ const QABlock: React.FC<QABlockProps> = ({ data, handleChange, quizState }) => {
                           }
                           type="radio"
                           id={optId}
-                          name={question.id} // Updated to use question.id to group options per question
+                          name={question.id}
                           checked={question.selected === option}
                           value={option}
                           data-id={question.id}

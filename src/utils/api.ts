@@ -23,7 +23,7 @@ export const fetchQuizData = async (
   }
 
   const data = await response.json();
-  console.log(data);
+
   const createQuizError = (
     title: string,
     message: string,
