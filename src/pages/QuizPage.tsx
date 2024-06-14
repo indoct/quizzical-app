@@ -33,9 +33,6 @@ const QuizPage: React.FC = () => {
     category: string | null,
     difficulty: string | null
   ) => {
-    console.log(
-      "running fetchData in QuizPage " + new Date().getMilliseconds()
-    );
     setLoading(true);
     setError(null);
 
@@ -182,7 +179,7 @@ const QuizPage: React.FC = () => {
               Check Answers
             </button>
           </>
-        )}{" "}
+        )}
         {gameOver && (
           <div className="btn-container">
             <button type="button" onClick={handleNewSettings}>

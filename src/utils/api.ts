@@ -4,9 +4,6 @@ export const fetchQuizData = async (
   category: string | null,
   difficulty: string | null
 ) => {
-  console.log(
-    "running fetchQuizData in api.ts " + new Date().getMilliseconds()
-  );
   const categoryParam =
     category && category !== "any" ? `&category=${category}` : "";
   const difficultyParam =

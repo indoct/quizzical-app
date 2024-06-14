@@ -258,7 +258,7 @@ fieldset:last-child {
 
 .options {
   display: flex;
-  gap: 6px 4px;
+  gap: 14px 4px;
   flex-wrap: wrap;
 }
 
