@@ -9,10 +9,15 @@ export type QuizState = {
   active: boolean;
 };
 
-export type Settings = {
-  difficulty: string;
+export interface SettingsProps {
+  setCategory: (category: string) => void;
+  setDifficulty: (difficulty: string) => void;
+}
+
+export interface QuizPageProps {
   category: string;
-};
+  difficulty: string;
+}
 
 export interface Questions {
   id: string;

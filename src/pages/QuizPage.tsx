@@ -7,11 +7,7 @@ import { nanoid } from "nanoid";
 import { fetchQuizData } from "../utils/api";
 import ErrorCountdown from "../components/ErrorCountdown";
 import ReactConfetti from "react-confetti";
-
-interface QuizPageProps {
-  category: string;
-  difficulty: string;
-}
+import { QuizPageProps } from "../types";
 
 const QuizPage: React.FC<QuizPageProps> = ({ category, difficulty }) => {
   const [quizState, setQuizState] = useState<QuizState>({

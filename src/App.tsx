@@ -21,7 +21,6 @@ const App: FC = () => {
   const [isDarkMode, setDarkMode] = useState<boolean>(checkUserTheme);
   const [category, setCategory] = useState<string>("any");
   const [difficulty, setDifficulty] = useState<string>("any");
-  // const navigate = useNavigate();
 
   const toggleDarkMode = (): void => {
     setDarkMode((prevMode) => {
@@ -30,12 +29,6 @@ const App: FC = () => {
       return newMode;
     });
   };
-
-  // const startQuiz = (selectedCategory: string, selectedDifficulty: string) => {
-  //   setCategory(selectedCategory);
-  //   setDifficulty(selectedDifficulty);
-  //   navigate("/quiz");
-  // };
 
   return (
     <main className={isDarkMode ? "dark-mode" : "light-mode"}>

@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-interface SettingsProps {
-  setCategory: (category: string) => void;
-  setDifficulty: (difficulty: string) => void;
-}
+import { SettingsProps } from "../types";
 
 const Settings: React.FC<SettingsProps> = ({ setCategory, setDifficulty }) => {
   const [category, setLocalCategory] = useState<string>("any");
