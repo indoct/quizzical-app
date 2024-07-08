@@ -146,11 +146,13 @@ const QuizPage: React.FC = () => {
         <h2>Sorry, an unexpected error has occurred: {error.title}</h2>
         <p>{error.message}</p>
         {error.response_code === 1 ? (
-          <button type="button" onClick={handleNewSettings}>
+          <button className="ui-btn" type="button" onClick={handleNewSettings}>
             Choose Different Settings
           </button>
         ) : (
-          <button onClick={handleRetry}>Try Again</button>
+          <button className="ui-btn" onClick={handleRetry}>
+            Try Again
+          </button>
         )}
       </div>
     ) : (
@@ -171,6 +173,7 @@ const QuizPage: React.FC = () => {
         {quizState.active && (
           <>
             <button
+              className="ui-btn"
               type="button"
               onClick={handleCheckBtn}
               disabled={!quizState.selected_count || !quizState.active}
@@ -182,10 +185,14 @@ const QuizPage: React.FC = () => {
         )}
         {gameOver && (
           <div className="btn-container">
-            <button type="button" onClick={handleNewSettings}>
+            <button
+              className="ui-btn"
+              type="button"
+              onClick={handleNewSettings}
+            >
               Change Settings
             </button>
-            <button type="button" onClick={handleRetry}>
+            <button className="ui-btn" type="button" onClick={handleRetry}>
               Play Again
             </button>
           </div>

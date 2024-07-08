@@ -77,7 +77,12 @@ const Settings: React.FC = () => {
           </fieldset>
         </div>
       </form>
-      <button type="submit" form="setup" onClick={(e) => handleStartQuiz(e)}>
+      <button
+        className="ui-btn"
+        type="submit"
+        form="setup"
+        onClick={(e) => handleStartQuiz(e)}
+      >
         Start Quiz
       </button>
     </>

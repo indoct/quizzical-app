@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { DarkModeSwitch } from "react-toggle-dark-mode";
+import ThemeToggle from "./components/ThemeToggle";
 
 const checkUserTheme = (): boolean => {
   const storedValue = localStorage.getItem("isDarkMode");
@@ -18,21 +18,17 @@ const checkUserTheme = (): boolean => {
 const App: FC = () => {
   const [isDarkMode, setDarkMode] = useState<boolean>(checkUserTheme);
 
-  const toggleDarkMode = (checked: boolean): void => {
-    setDarkMode(checked);
-    localStorage.setItem("isDarkMode", JSON.stringify(checked));
+  const toggleDarkMode = (): void => {
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem("isDarkMode", JSON.stringify(newMode));
+      return newMode;
+    });
   };
 
   return (
     <main className={isDarkMode ? "dark-mode" : "light-mode"}>
-      <div className="mode-switch">
-        <DarkModeSwitch
-          style={{ marginBottom: "2rem" }}
-          checked={isDarkMode}
-          onChange={toggleDarkMode}
-          size={30}
-        />
-      </div>
+      <ThemeToggle isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
       <section>
         <h1>Quizzical</h1>
         <Outlet />
