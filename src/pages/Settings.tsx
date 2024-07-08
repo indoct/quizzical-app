@@ -1,16 +1,23 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Settings: React.FC = () => {
-  const [category, setCategory] = useState<string>("any");
-  const [difficulty, setDifficulty] = useState<string>("any");
+interface SettingsProps {
+  setCategory: (category: string) => void;
+  setDifficulty: (difficulty: string) => void;
+}
+
+const Settings: React.FC<SettingsProps> = ({ setCategory, setDifficulty }) => {
+  const [category, setLocalCategory] = useState<string>("any");
+  const [difficulty, setLocalDifficulty] = useState<string>("any");
   const navigate = useNavigate();
 
   const handleStartQuiz = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
-    e.preventDefault;
-    navigate(`/quiz?category=${category}&difficulty=${difficulty}`);
+    e.preventDefault();
+    setCategory(category);
+    setDifficulty(difficulty);
+    navigate("/quiz");
   };
 
   return (
@@ -25,7 +32,7 @@ const Settings: React.FC = () => {
                 id="category"
                 name="category"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setLocalCategory(e.target.value)}
               >
                 <option value="any">Any Category</option>
                 <option value="9">General Knowledge</option>
@@ -64,7 +71,7 @@ const Settings: React.FC = () => {
               Difficulty:
               <select
                 value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value)}
+                onChange={(e) => setLocalDifficulty(e.target.value)}
                 name="difficulty"
                 id="difficulty"
               >
@@ -81,7 +88,7 @@ const Settings: React.FC = () => {
         className="ui-btn"
         type="submit"
         form="setup"
-        onClick={(e) => handleStartQuiz(e)}
+        onClick={handleStartQuiz}
       >
         Start Quiz
       </button>

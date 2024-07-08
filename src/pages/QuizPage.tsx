@@ -1,6 +1,6 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, ChangeEvent, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import QABlock from "../components/QABlock";
-import { useState, useEffect, ChangeEvent } from "react";
 import { Questions, QuizState, QuizError } from "../types";
 import { decode } from "html-entities";
 import { nanoid } from "nanoid";
@@ -8,7 +8,12 @@ import { fetchQuizData } from "../utils/api";
 import ErrorCountdown from "../components/ErrorCountdown";
 import ReactConfetti from "react-confetti";
 
-const QuizPage: React.FC = () => {
+interface QuizPageProps {
+  category: string;
+  difficulty: string;
+}
+
+const QuizPage: React.FC<QuizPageProps> = ({ category, difficulty }) => {
   const [quizState, setQuizState] = useState<QuizState>({
     selected_count: false,
     active: false,
@@ -18,7 +23,7 @@ const QuizPage: React.FC = () => {
   const [error, setError] = useState<QuizError | null>(null);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const navigate = useNavigate();
-  const location = useLocation();
+  const isFetchCalled = useRef(false); // Track if fetch has been called
 
   const shuffle = (array: string[]): string[] => {
     for (let i = array.length - 1; i >= 0; i--) {
@@ -29,10 +34,7 @@ const QuizPage: React.FC = () => {
     return array;
   };
 
-  const fetchData = async (
-    category: string | null,
-    difficulty: string | null
-  ) => {
+  const fetchData = async () => {
     setLoading(true);
     setError(null);
 
@@ -53,9 +55,7 @@ const QuizPage: React.FC = () => {
         };
       });
       setQuizArray(processedData);
-      setQuizState((prevState) => {
-        return { ...prevState, active: true };
-      });
+      setQuizState((prevState) => ({ ...prevState, active: true }));
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -64,11 +64,11 @@ const QuizPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const category = params.get("category");
-    const difficulty = params.get("difficulty");
-    fetchData(category, difficulty);
-  }, [location.search]);
+    if (!isFetchCalled.current) {
+      fetchData();
+      isFetchCalled.current = true;
+    }
+  }, [category, difficulty]);
 
   useEffect(() => {
     if (quizState.active) {
@@ -85,7 +85,6 @@ const QuizPage: React.FC = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { value, dataset } = e.target;
-
     if (dataset.id) {
       selectOption(value, dataset.id);
     }
@@ -93,42 +92,36 @@ const QuizPage: React.FC = () => {
 
   const selectOption = (val: string, qid: string): void => {
     setQuizArray((prevQuestions) =>
-      prevQuestions.map((question) => {
-        return question.id === qid ? { ...question, selected: val } : question;
-      })
+      prevQuestions.map((question) =>
+        question.id === qid ? { ...question, selected: val } : question
+      )
     );
   };
 
-  function uiMessage(): string {
+  const uiMessage = (): string => {
     return !quizState.selected_count && quizState.active
       ? "Please select an answer for every question"
       : quizState.selected_count && quizState.active
       ? "Good to go!"
       : `You scored ${checkAnswers()}/${quizArray.length} correct answers.`;
-  }
+  };
 
-  function checkAnswers(): number {
+  const checkAnswers = (): number => {
     const correctAnswers = quizArray.filter(
       (ans) => ans.correct === ans.selected
     ).length;
     return correctAnswers;
-  }
+  };
 
   const handleCheckBtn = (): void => {
-    setQuizState((prevState) => ({
-      ...prevState,
-      active: !prevState.active,
-    }));
+    setQuizState((prevState) => ({ ...prevState, active: !prevState.active }));
     setGameOver(true);
     checkAnswers();
   };
 
   const handleRetry = (): void => {
     if (gameOver) setGameOver(false);
-    const params = new URLSearchParams(location.search);
-    const category = params.get("category");
-    const difficulty = params.get("difficulty");
-    fetchData(category, difficulty);
+    fetchData();
   };
 
   const handleNewSettings = (): void => {
@@ -171,17 +164,15 @@ const QuizPage: React.FC = () => {
       <div className="feedback">
         <p className="answer-text">{uiMessage()}</p>
         {quizState.active && (
-          <>
-            <button
-              className="ui-btn"
-              type="button"
-              onClick={handleCheckBtn}
-              disabled={!quizState.selected_count || !quizState.active}
-              id="check-answer"
-            >
-              Check Answers
-            </button>
-          </>
+          <button
+            className="ui-btn"
+            type="button"
+            onClick={handleCheckBtn}
+            disabled={!quizState.selected_count || !quizState.active}
+            id="check-answer"
+          >
+            Check Answers
+          </button>
         )}
         {gameOver && (
           <div className="btn-container">

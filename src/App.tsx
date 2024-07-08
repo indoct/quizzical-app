@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import ThemeToggle from "./components/ThemeToggle";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Settings from "./pages/Settings";
 import QuizPage from "./pages/QuizPage";
 
@@ -21,7 +21,7 @@ const App: FC = () => {
   const [isDarkMode, setDarkMode] = useState<boolean>(checkUserTheme);
   const [category, setCategory] = useState<string>("any");
   const [difficulty, setDifficulty] = useState<string>("any");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const toggleDarkMode = (): void => {
     setDarkMode((prevMode) => {
@@ -31,11 +31,11 @@ const App: FC = () => {
     });
   };
 
-  const startQuiz = (selectedCategory: string, selectedDifficulty: string) => {
-    setCategory(selectedCategory);
-    setDifficulty(selectedDifficulty);
-    navigate("/quiz");
-  };
+  // const startQuiz = (selectedCategory: string, selectedDifficulty: string) => {
+  //   setCategory(selectedCategory);
+  //   setDifficulty(selectedDifficulty);
+  //   navigate("/quiz");
+  // };
 
   return (
     <main className={isDarkMode ? "dark-mode" : "light-mode"}>
@@ -43,7 +43,15 @@ const App: FC = () => {
       <section>
         <h1>Quizzical</h1>
         <Routes>
-          <Route path="/" element={<Settings startQuiz={startQuiz} />} />
+          <Route
+            path="/"
+            element={
+              <Settings
+                setCategory={setCategory}
+                setDifficulty={setDifficulty}
+              />
+            }
+          />
           <Route
             path="/quiz"
             element={<QuizPage category={category} difficulty={difficulty} />}
