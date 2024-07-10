@@ -1,9 +1,4 @@
-import {
-  UilMoon,
-  UilSun,
-  UilSetting,
-  UilRefresh,
-} from "@iconscout/react-unicons";
+import { UilMoon, UilSun, UilSetting } from "@iconscout/react-unicons";
 
 interface HeaderProps {
   isDarkMode: boolean;
