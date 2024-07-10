@@ -1,5 +1,4 @@
 import { useState, useEffect, ChangeEvent, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import QABlock from "../components/QABlock";
 import { Questions, QuizState, QuizError } from "../types";
 import { decode } from "html-entities";
@@ -9,7 +8,13 @@ import ErrorCountdown from "../components/ErrorCountdown";
 import ReactConfetti from "react-confetti";
 import { QuizPageProps } from "../types";
 
-const QuizPage: React.FC<QuizPageProps> = ({ category, difficulty }) => {
+const QuizPage: React.FC<QuizPageProps> = ({
+  category,
+  difficulty,
+  gameOver,
+  handleNewSettings,
+  setGameOver,
+}) => {
   const [quizState, setQuizState] = useState<QuizState>({
     selected_count: false,
     active: false,
@@ -17,8 +22,6 @@ const QuizPage: React.FC<QuizPageProps> = ({ category, difficulty }) => {
   const [quizArray, setQuizArray] = useState<Questions[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<QuizError | null>(null);
-  const [gameOver, setGameOver] = useState<boolean>(false);
-  const navigate = useNavigate();
   const isFetchCalled = useRef(false); // Track if fetch has been called
 
   const shuffle = (array: string[]): string[] => {
@@ -115,16 +118,6 @@ const QuizPage: React.FC<QuizPageProps> = ({ category, difficulty }) => {
     checkAnswers();
   };
 
-  const handleRetry = (): void => {
-    if (gameOver) setGameOver(false);
-    fetchData();
-  };
-
-  const handleNewSettings = (): void => {
-    setGameOver(false);
-    navigate("/");
-  };
-
   if (loading) {
     return <div>Retrieving and loading trivia questions, please hold...</div>;
   }
@@ -139,13 +132,17 @@ const QuizPage: React.FC<QuizPageProps> = ({ category, difficulty }) => {
             Choose Different Settings
           </button>
         ) : (
-          <button className="ui-btn" onClick={handleRetry}>
+          <button className="ui-btn" onClick={() => setGameOver(false)}>
             Try Again
           </button>
         )}
       </div>
     ) : (
-      <ErrorCountdown initialSeconds={5} handleRetry={handleRetry} />
+      <ErrorCountdown
+        initialSeconds={5}
+        setGameOver={setGameOver}
+        fetchData={fetchData}
+      />
     );
   }
 
@@ -179,7 +176,14 @@ const QuizPage: React.FC<QuizPageProps> = ({ category, difficulty }) => {
             >
               Change Settings
             </button>
-            <button className="ui-btn" type="button" onClick={handleRetry}>
+            <button
+              className="ui-btn"
+              type="button"
+              onClick={() => {
+                setGameOver(false);
+                fetchData();
+              }}
+            >
               Play Again
             </button>
           </div>

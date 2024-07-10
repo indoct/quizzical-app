@@ -17,6 +17,9 @@ export interface SettingsProps {
 export interface QuizPageProps {
   category: string;
   difficulty: string;
+  gameOver: boolean;
+  handleNewSettings: () => void;
+  setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface Questions {
