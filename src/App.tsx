@@ -1,8 +1,10 @@
 import { FC, useState } from "react";
-import ThemeToggle from "./components/ThemeToggle";
 import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Settings from "./pages/Settings";
 import QuizPage from "./pages/QuizPage";
+import { useNavigate } from "react-router-dom";
 
 const checkUserTheme = (): boolean => {
   const storedValue = localStorage.getItem("isDarkMode");
@@ -21,6 +23,8 @@ const App: FC = () => {
   const [isDarkMode, setDarkMode] = useState<boolean>(checkUserTheme);
   const [category, setCategory] = useState<string>("any");
   const [difficulty, setDifficulty] = useState<string>("any");
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const toggleDarkMode = (): void => {
     setDarkMode((prevMode) => {
@@ -30,11 +34,21 @@ const App: FC = () => {
     });
   };
 
+  const handleNewSettings = (): void => {
+    setGameOver(false);
+    navigate("/");
+  };
+
   return (
-    <main className={isDarkMode ? "dark-mode" : "light-mode"}>
-      <ThemeToggle isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-      <section>
-        <h1>Quizzical</h1>
+    <div
+      className={isDarkMode ? "dark-mode container" : "light-mode container"}
+    >
+      <Header
+        isDarkMode={isDarkMode}
+        toggleDarkMode={toggleDarkMode}
+        handleNewSettings={handleNewSettings}
+      />
+      <main>
         <Routes>
           <Route
             path="/"
@@ -47,19 +61,20 @@ const App: FC = () => {
           />
           <Route
             path="/quiz"
-            element={<QuizPage category={category} difficulty={difficulty} />}
+            element={
+              <QuizPage
+                category={category}
+                difficulty={difficulty}
+                gameOver={gameOver}
+                handleNewSettings={handleNewSettings}
+                setGameOver={setGameOver}
+              />
+            }
           />
         </Routes>
-      </section>
-      <footer>
-        developed with ❤ by{" "}
-        <strong>
-          <a href="https://scho.pro" target="_blank">
-            scho.
-          </a>
-        </strong>
-      </footer>
-    </main>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

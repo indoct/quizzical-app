@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 
 interface ErrorCountdownProps {
   initialSeconds: number;
-  handleRetry: () => void;
+  setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchData: () => void;
 }
 
 const useCountdown = (initialSeconds: number) => {
@@ -23,15 +24,17 @@ const useCountdown = (initialSeconds: number) => {
 
 const ErrorCountdown: React.FC<ErrorCountdownProps> = ({
   initialSeconds,
-  handleRetry,
+  fetchData,
+  setGameOver,
 }) => {
   const countdown = useCountdown(initialSeconds);
 
   useEffect(() => {
     if (countdown === 0) {
-      handleRetry();
+      setGameOver(false);
+      fetchData();
     }
-  }, [countdown, handleRetry]);
+  }, [countdown]);
 
   return (
     <div>
