@@ -1,6 +1,8 @@
 import { FC, useState } from "react";
 import ThemeToggle from "./components/ThemeToggle";
 import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Settings from "./pages/Settings";
 import QuizPage from "./pages/QuizPage";
 
@@ -31,10 +33,11 @@ const App: FC = () => {
   };
 
   return (
-    <main className={isDarkMode ? "dark-mode" : "light-mode"}>
-      <ThemeToggle isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-      <section>
-        <h1>Quizzical</h1>
+    <div
+      className={isDarkMode ? "dark-mode container" : "light-mode container"}
+    >
+      <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+      <main>
         <Routes>
           <Route
             path="/"
@@ -50,16 +53,9 @@ const App: FC = () => {
             element={<QuizPage category={category} difficulty={difficulty} />}
           />
         </Routes>
-      </section>
-      <footer>
-        developed with ❤ by{" "}
-        <strong>
-          <a href="https://scho.pro" target="_blank">
-            scho.
-          </a>
-        </strong>
-      </footer>
-    </main>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

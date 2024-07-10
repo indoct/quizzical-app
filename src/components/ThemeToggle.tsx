@@ -17,11 +17,11 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({
       <button onClick={() => toggleDarkMode()} className="toggle-btn">
         {isDarkMode ? (
           <>
-            <UilSun size={16} color={"#0f1422"} /> Light
+            <UilSun size={18} color={"#0f1422"} /> Light
           </>
         ) : (
           <>
-            <UilMoon size={16} color={"#ffffff"} /> Dark
+            <UilMoon size={18} color={"#ffffff"} /> Dark
           </>
         )}{" "}
         Mode
