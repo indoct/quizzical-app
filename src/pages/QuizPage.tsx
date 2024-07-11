@@ -90,11 +90,12 @@ const QuizPage: React.FC<QuizPageProps> = ({
   };
 
   const selectOption = (val: string, qid: string): void => {
-    setQuizArray((prevQuestions) =>
-      prevQuestions.map((question) =>
+    setQuizArray((prevQuestions) => {
+      const updatedQuestions = prevQuestions.map((question) =>
         question.id === qid ? { ...question, selected: val } : question
-      )
-    );
+      );
+      return updatedQuestions;
+    });
   };
 
   const uiMessage = (): string => {

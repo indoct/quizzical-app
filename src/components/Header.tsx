@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({
           className="ctrl-btn"
           disabled={!allowFetch}
         >
-          <UilRefresh size={28} />
+          <UilRefresh size={28} />2
         </button> */}
         <button
           role="button"
