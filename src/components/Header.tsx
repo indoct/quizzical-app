@@ -11,29 +11,9 @@ const Header: React.FC<HeaderProps> = ({
   toggleDarkMode,
   handleNewSettings,
 }) => {
-  // const [allowFetch, setAllowFetch] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   setAllowFetch(false);
-
-  //   const fetchTimer = setTimeout(() => {
-  //     setAllowFetch(true);
-  //   }, 5000);
-
-  //   return () => clearTimeout(fetchTimer);
-  // }, []);
-
   return (
     <header>
       <div className="controls">
-        {/* <button
-          role="button"
-          aria-label="Get new questions"
-          className="ctrl-btn"
-          disabled={!allowFetch}
-        >
-          <UilRefresh size={28} />2
-        </button> */}
         <button
           role="button"
           aria-label="Change settings"

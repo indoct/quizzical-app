@@ -4,7 +4,6 @@ import { UilCheckCircle } from "@iconscout/react-unicons";
 import { UilTimesCircle } from "@iconscout/react-unicons";
 
 const QABlock: React.FC<QABlockProps> = ({ data, handleChange, quizState }) => {
-  // console.log(data);
   return (
     <div>
       {data.map((question, qIndex) => {
@@ -30,7 +29,6 @@ const QABlock: React.FC<QABlockProps> = ({ data, handleChange, quizState }) => {
                           onChange={handleChange}
                         />
                         <label
-                          // className="answer"
                           className={
                             question.selected === option && quizState.active
                               ? "ans-selected answer"

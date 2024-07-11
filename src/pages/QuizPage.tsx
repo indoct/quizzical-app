@@ -22,7 +22,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
   const [quizArray, setQuizArray] = useState<Questions[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<QuizError | null>(null);
-  const isFetchCalled = useRef(false); // Track if fetch has been called
+  const isFetchCalled = useRef(false);
 
   const shuffle = (array: string[]): string[] => {
     for (let i = array.length - 1; i >= 0; i--) {

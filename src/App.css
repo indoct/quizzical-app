@@ -182,32 +182,6 @@ footer a:hover {
   text-decoration: none;
 }
 
-/* section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 800px;
-  flex-grow: 1;
-} */
-
-/* @media (max-width: 480px) {
-  header {
-    display: flex;
-    flex-direction: column;
-  }
-  header > div:nth-child(1) {
-    order: 1;
-    flex: 0.5;
-  }
-  header > div:nth-child(2) {
-    order: 3;
-  }
-  header > div:nth-child(3) {
-    order: 2;
-    flex: 0.5;
-  }
-} */
-
 .ui-btn {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -381,11 +355,6 @@ input[type="radio"]:focus-visible + label {
   outline: 3px solid rgb(255, 115, 0);
 }
 
-input[type="radio"]:checked + label {
-  background-color: var(--quiz-dark);
-  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
-}
-
 .answer {
   border: 1px solid var(--quiz-dark);
   transition: all 0.3s;
@@ -461,8 +430,6 @@ input[type="radio"]:checked + label {
 .dark-mode {
   color-scheme: dark;
   background: var(--quiz-dark);
-  /* background-size: cover;
-  background-repeat: no-repeat; */
   color: var(--quiz-light);
 }
 
